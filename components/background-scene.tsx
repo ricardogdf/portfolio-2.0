@@ -3,6 +3,8 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import BlackHole from "./black-hole";
+import Crosshair from "./crosshair";
 
 export default function BackgroundScene({
   sendRocket,
@@ -19,6 +21,7 @@ export default function BackgroundScene({
   const [showBlackHole, setShowBlackHole] = useState(false);
   const [showSpeedLines, setShowSpeedLines] = useState(false);
   const [spaceDepth, setSpaceDepth] = useState(0);
+  const [isSpeedLinesExiting, setIsSpeedLinesExiting] = useState(false);
 
   // Gera linhas de velocidade
   const speedLines = useMemo(() => {
@@ -99,11 +102,15 @@ export default function BackgroundScene({
             setSpaceDepth((prev) => {
               if (prev >= 1) {
                 clearInterval(spaceTransition);
+                // Inicia o efeito de saída das linhas de velocidade
+                setIsSpeedLinesExiting(true);
                 // Mostra o buraco negro quando atingir o espaço profundo
                 setTimeout(() => {
-                  setShowBlackHole(true);
+                  setTimeout(() => {
+                    setShowBlackHole(true);
+                  }, 1000);
                   setShowSpeedLines(false);
-                }, 4000);
+                }, 6000);
                 return 1;
               }
               return prev + 0.0005; // Mantém a velocidade original
@@ -187,11 +194,13 @@ export default function BackgroundScene({
         className="absolute inset-0 w-full h-full"
         initial={false}
         animate={{
-          background: isDark
+          background: isInSpace
+            ? "linear-gradient(to bottom, #000000 100%, #0c1445 100%)"
+            : isDark
             ? "linear-gradient(to bottom, #0c1445 0%, #1a2980 100%)"
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
-        transition={{ duration: 2.5 }}
+        transition={{ duration: isInSpace ? 3.5 : 2.5 }}
       />
 
       {/* Container para o sol e a lua */}
@@ -214,9 +223,17 @@ export default function BackgroundScene({
                     top: "100%",
                     opacity: [0, 1, 0],
                   }}
+                  exit={{
+                    top: "200%",
+                    opacity: 0,
+                    transition: {
+                      duration: 0.5,
+                      ease: "linear",
+                    },
+                  }}
                   transition={{
                     duration: 0.5,
-                    repeat: Infinity,
+                    repeat: isSpeedLinesExiting ? 0 : Infinity,
                     delay: line.delay,
                     ease: "linear",
                   }}
@@ -286,7 +303,7 @@ export default function BackgroundScene({
 
         {/* Estrelas (apenas no modo escuro ou durante a transição para claro na fase inicial) */}
         <AnimatePresence>
-          {(isDark || isChangingToLight || isInSpace) && !showBlackHole && (
+          {(isDark || isChangingToLight || isInSpace) && (
             <>
               {stars.map((star) => (
                 <motion.div
@@ -294,11 +311,11 @@ export default function BackgroundScene({
                   className="star"
                   initial={{ opacity: 0 }}
                   animate={{
-                    opacity: isInSpace ? 1 : 0.8,
-                    scale: isInSpace ? 1.5 : 1,
+                    opacity: isInSpace ? 0 : 0.8,
+                    scale: isInSpace ? 0 : 1,
                   }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 3.0 }}
+                  transition={{ duration: 2.0 }}
                   style={{
                     position: "absolute",
                     width: `${star.size}px`,
@@ -309,7 +326,7 @@ export default function BackgroundScene({
                     boxShadow: `0 0 ${star.size + 1}px white`,
                     borderRadius: "50%",
                     background: "white",
-                    opacity: Math.max(0, 1 - spaceDepth * 2.5), // Aumentado para 2.5 para sumir mais cedo
+                    opacity: isInSpace ? 0 : Math.max(0, 1 - spaceDepth * 2.5), // Aumentado para 2.5 para sumir mais cedo
                   }}
                 />
               ))}
@@ -354,20 +371,42 @@ export default function BackgroundScene({
         <AnimatePresence>
           {showBlackHole && (
             <motion.div
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              initial={{ scale: 0, opacity: 0 }}
+              initial={{ y: 0, x: 0, scale: 0.1, opacity: 0.1 }}
               animate={{
-                scale: 1,
-                opacity: 1,
-                rotate: 360,
+                y: [0, 0, "50vh", 0],
+                x: [0, 0, "-25vw", 0],
+                scale: [0.1, 0.1, 0.2, 1],
+                opacity: [0.1, 1, 1, 1],
               }}
               transition={{
-                duration: 6.0,
-                ease: "easeOut",
+                duration: 8.0,
+                times: [0, 0.5, 0.75, 1],
+                ease: "easeInOut",
               }}
             >
-              <div className="w-64 h-64 rounded-full bg-black shadow-[0_0_50px_#000,inset_0_0_50px_#000]" />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-900 via-black to-purple-900 opacity-50 animate-spin" />
+              <BlackHole />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Mira */}
+        <AnimatePresence>
+          {showBlackHole && (
+            <motion.div
+              initial={{ y: 0, x: 1 }}
+              animate={{
+                y: [0, 0, "-45vh", "10vh", "-150vh", "-150vh"],
+                x: [0, 0, 0, "-25vw", 0, 0],
+                scale: [0, 1, 1, 1, 4, 4],
+                opacity: [0, 1, 1, 1, 1, 0],
+              }}
+              transition={{
+                duration: 10.0,
+                times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+                ease: "easeInOut",
+              }}
+            >
+              <Crosshair />
             </motion.div>
           )}
         </AnimatePresence>

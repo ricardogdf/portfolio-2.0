@@ -142,6 +142,97 @@
   z-index: 1;
 }
 
+.crosshair {
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
+  width: 150px;
+  height: 150px;
+  transform: translate(-50%, -50%);
+  border: 2px solid lime;
+  box-shadow: 0 0 10px lime;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scannerLine {
+  z-index: 1;
+  position: absolute;
+  background: lime;
+  opacity: 0.4;
+}
+
+.horiz {
+  height: 2px;
+  width: 100%;
+  animation: scanHoriz 2s linear infinite;
+}
+
+.vert {
+  width: 2px;
+  height: 100%;
+  animation: scanVert 2s linear infinite;
+}
+
+.blinking {
+  animation: blink 0.5s step-start infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes scanHoriz {
+  0% {
+    top: 0%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes scanVert {
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.cornerText {
+  position: absolute;
+  font-size: 10px;
+  color: lime;
+  background: rgba(0, 255, 0, 0.1);
+  padding: 2px 4px;
+}
+
+.tl {
+  top: -14px;
+  left: -14px;
+}
+.tr {
+  top: -14px;
+  right: -14px;
+}
+.bl {
+  bottom: -14px;
+  left: -14px;
+}
+.br {
+  bottom: -14px;
+  right: -14px;
+}
+
 .sun,
 .moon {
   position: absolute;

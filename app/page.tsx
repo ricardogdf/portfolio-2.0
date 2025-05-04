@@ -34,15 +34,15 @@ export default function Home() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <BackgroundScene sendRocket={sendRocket} isSucking={isSucking} />
-      <motion.div 
+      <motion.div
         className="relative z-10"
         animate={{
           y: isSucking ? 1000 : 0,
-          opacity: isSucking ? 0 : 1
+          opacity: isSucking ? 0 : 1,
         }}
         transition={{
           duration: 2,
-          ease: "easeIn"
+          ease: "easeIn",
         }}
       >
         <Header />
@@ -52,12 +52,12 @@ export default function Home() {
           <Experience />
           <Projects />
           <div className="flex justify-center">
-            <button 
+            <button
               onClick={handleButtonClick}
               className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
               disabled={sendRocket}
             >
-              [ ]
+              []
             </button>
           </div>
         </main>
