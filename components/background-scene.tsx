@@ -4,16 +4,14 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function BackgroundScene() {
+export default function BackgroundScene({
+  sendRocket,
+}: {
+  sendRocket: boolean;
+}) {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [previousTheme, setPreviousTheme] = useState<string | undefined>(
-    undefined
-  );
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [transitionPhase, setTransitionPhase] = useState<
-    "initial" | "middle" | "final"
-  >("initial");
 
   // Evita problemas de hidratação
   useEffect(() => {
@@ -22,41 +20,15 @@ export default function BackgroundScene() {
 
   // Detecta mudanças de tema para iniciar a transição
   useEffect(() => {
-    if (
-      mounted &&
-      previousTheme !== undefined &&
-      previousTheme !== resolvedTheme
-    ) {
-      setIsTransitioning(true);
-      setTransitionPhase("initial");
+    if (!mounted || !resolvedTheme) return;
 
-      // Fase intermediária (quando um astro saiu e o outro ainda não entrou)
-      const middleTimer = setTimeout(() => {
-        setTransitionPhase("middle");
-      }, 1500);
+    setIsTransitioning(true);
+    const timer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 2500);
 
-      // Fase final (quando o novo astro está entrando)
-      const finalTimer = setTimeout(() => {
-        setTransitionPhase("final");
-      }, 2000);
-
-      // Fim da transição
-      const endTimer = setTimeout(() => {
-        setIsTransitioning(false);
-        setTransitionPhase("initial");
-      }, 4000);
-
-      return () => {
-        clearTimeout(middleTimer);
-        clearTimeout(finalTimer);
-        clearTimeout(endTimer);
-      };
-    }
-
-    if (mounted && resolvedTheme) {
-      setPreviousTheme(resolvedTheme);
-    }
-  }, [resolvedTheme, mounted, previousTheme]);
+    return () => clearTimeout(timer);
+  }, [resolvedTheme, mounted]);
 
   if (!mounted) return null;
 
@@ -91,36 +63,58 @@ export default function BackgroundScene() {
     return stars;
   };
 
-  // Determina se o sol deve ser visível
-  const isSunVisible = () => {
-    if (!isTransitioning) return !isDark;
-    if (isChangingToDark) return transitionPhase === "initial";
-    if (isChangingToLight) return transitionPhase === "final";
-    return false;
-  };
-
-  // Determina se a lua deve ser visível
-  const isMoonVisible = () => {
-    if (!isTransitioning) return isDark;
-    if (isChangingToDark) return transitionPhase === "final";
-    if (isChangingToLight) return transitionPhase === "initial";
-    return false;
-  };
-
   // Variantes de animação para o sol
   const sunVariants = {
-    visible: { top: 60, right: 120, opacity: 1 }, // posição fixa no céu (canto superior direito)
-    sunrise: { top: 60, left: "100%", opacity: 0.8 }, // nasce da direita
-    sunset: { top: 60, left: "0%", opacity: 0 }, // se põe à esquerda
-    hidden: { top: 60, left: "100%", opacity: 0 }, // fora da tela à direita
+    hidden: {
+      x: "400%",
+      y: "400%",
+      opacity: 0,
+    },
+    visible: {
+      x: 0,
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 2.5,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
+    exit: {
+      x: "-400%",
+      y: "-400%",
+      opacity: 0,
+      transition: {
+        duration: 2.5,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
   };
 
   // Variantes de animação para a lua
   const moonVariants = {
-    visible: { top: 60, right: 120, opacity: 1 },
-    moonrise: { top: 60, left: "100%", opacity: 0.8 },
-    moonset: { top: 60, left: "0%", opacity: 0 },
-    hidden: { top: 60, left: "100%", opacity: 0 },
+    hidden: {
+      x: "400%",
+      y: "400%",
+      opacity: 0,
+    },
+    visible: {
+      x: 0,
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 2.5,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
+    exit: {
+      x: "-400%",
+      y: "-400%",
+      opacity: 0,
+      transition: {
+        duration: 2.5,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
   };
 
   return (
@@ -137,89 +131,59 @@ export default function BackgroundScene() {
         transition={{ duration: 2.5 }}
       />
 
-      {/* Transição do Sol */}
-      <AnimatePresence>
-        {isSunVisible() && (
-          <motion.div
-            className="sun"
-            initial={
-              isChangingToLight && transitionPhase === "final"
-                ? sunVariants.sunrise
-                : sunVariants.visible
-            }
-            animate={
-              isChangingToDark && transitionPhase === "initial"
-                ? sunVariants.sunset
-                : sunVariants.visible
-            }
-            exit={sunVariants.hidden}
-            transition={{
-              duration: 2,
-              ease: "easeInOut",
-              opacity: { duration: 1.5 },
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Container para o sol e a lua */}
+      <div className="relative w-full h-full">
+        {/* Transição do Sol */}
+        <AnimatePresence>
+          {(!isDark || isChangingToLight) && (
+            <motion.div
+              className="sun"
+              variants={sunVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Transição da Lua */}
-      <AnimatePresence>
-        {isMoonVisible() && (
-          <motion.div
-            className="moon"
-            initial={
-              isChangingToDark && transitionPhase === "initial"
-                ? moonVariants.moonrise
-                : moonVariants.visible
-            }
-            animate={
-              isChangingToLight && transitionPhase === "final"
-                ? moonVariants.moonset
-                : moonVariants.visible
-            }
-            exit={moonVariants.hidden}
-            transition={{
-              duration: 2,
-              ease: "easeInOut",
-              opacity: { duration: 1.5 },
-            }}
-          />
-        )}
-      </AnimatePresence>
+        {/* Transição da Lua */}
+        <AnimatePresence>
+          {(isDark || isChangingToDark) && (
+            <motion.div
+              className="moon"
+              variants={moonVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            />
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Nuvens (apenas no modo claro ou durante a transição para escuro na fase inicial) */}
       <AnimatePresence>
-        {(!isDark || (isChangingToDark && transitionPhase === "initial")) && (
+        {(!isDark || isChangingToDark) && (
           <>
             <motion.div
               className="cloud cloud-1"
-              initial={{
-                opacity:
-                  isChangingToLight && transitionPhase === "final" ? 0 : 1,
-              }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: isChangingToDark ? 0 : 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 2 }}
+              transition={{ duration: 2.5 }}
             />
             <motion.div
               className="cloud cloud-2"
-              initial={{
-                opacity:
-                  isChangingToLight && transitionPhase === "final" ? 0 : 1,
-              }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: isChangingToDark ? 0 : 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 2, delay: 0.1 }}
+              transition={{ duration: 2.5, delay: 0.1 }}
             />
             <motion.div
               className="cloud cloud-3"
-              initial={{
-                opacity:
-                  isChangingToLight && transitionPhase === "final" ? 0 : 1,
-              }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: isChangingToDark ? 0 : 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 2, delay: 0.2 }}
+              transition={{ duration: 2.5, delay: 0.2 }}
             />
           </>
         )}
@@ -227,8 +191,7 @@ export default function BackgroundScene() {
 
       {/* Estrelas (apenas no modo escuro ou durante a transição para claro na fase inicial) */}
       <AnimatePresence>
-        {(isDark || (isChangingToLight && transitionPhase === "initial")) &&
-          generateStars()}
+        {(isDark || isChangingToLight) && generateStars()}
       </AnimatePresence>
 
       {/* Gramado (presente em ambos os temas) */}
@@ -310,6 +273,19 @@ export default function BackgroundScene() {
               <div className="fire-glow" />
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Foguete */}
+      <AnimatePresence>
+        {sendRocket && (
+          <motion.div
+            className="rocket"
+            initial={{ y: 0 }}
+            animate={{ y: "-500%" }}
+            exit={{ y: "-2000%" }}
+            transition={{ duration: 2.0 }}
+          />
         )}
       </AnimatePresence>
     </div>
