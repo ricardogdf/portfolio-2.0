@@ -6,12 +6,33 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function BackgroundScene({
   sendRocket,
+  isSucking,
 }: {
   sendRocket: boolean;
+  isSucking: boolean;
 }) {
-  const { theme, resolvedTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isInSpace, setIsInSpace] = useState(false);
+  const [showBlackHole, setShowBlackHole] = useState(false);
+  const [showSpeedLines, setShowSpeedLines] = useState(false);
+  const [spaceDepth, setSpaceDepth] = useState(0);
+
+  // Gera linhas de velocidade
+  const speedLines = useMemo(() => {
+    const lines = [];
+    for (let i = 0; i < 30; i++) {
+      lines.push({
+        id: i,
+        left: Math.random() * 100,
+        height: Math.random() * 100 + 50,
+        delay: Math.random() * 3,
+      });
+    }
+    return lines;
+  }, []);
 
   // Gera estrelas aleatórias para o céu noturno
   const stars = useMemo(() => {
@@ -27,7 +48,7 @@ export default function BackgroundScene({
       });
     }
     return starsArray;
-  }, []); // Array de estrelas será gerado apenas uma vez
+  }, []);
 
   // Evita problemas de hidratação
   useEffect(() => {
@@ -37,7 +58,7 @@ export default function BackgroundScene({
   // Detecta mudanças de tema para iniciar a transição
   useEffect(() => {
     if (!mounted || !resolvedTheme) return;
-    
+
     setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
@@ -45,6 +66,59 @@ export default function BackgroundScene({
 
     return () => clearTimeout(timer);
   }, [resolvedTheme, mounted]);
+
+  // Monitora o scroll e controla o efeito de sucção
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      setScrollPosition(currentScroll);
+
+      if (sendRocket) {
+        // Calcula a profundidade do espaço baseada na posição do scroll
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrollProgress = 1 - currentScroll / maxScroll;
+
+        // Ajusta a progressão para ser gradual
+        const adjustedProgress = Math.pow(scrollProgress, 1.5);
+        setSpaceDepth(adjustedProgress);
+
+        // Ativa o efeito espacial quando chegar ao topo
+        if (currentScroll < 10) {
+          setIsInSpace(true);
+          setTheme("dark"); // Força o tema escuro
+
+          // Desabilita o scroll
+          document.body.style.overflow = "hidden";
+
+          // Mostra as linhas de velocidade
+          setShowSpeedLines(true);
+
+          // Continua a transição para o espaço profundo
+          const spaceTransition = setInterval(() => {
+            setSpaceDepth((prev) => {
+              if (prev >= 1) {
+                clearInterval(spaceTransition);
+                // Mostra o buraco negro quando atingir o espaço profundo
+                setTimeout(() => {
+                  setShowBlackHole(true);
+                  setShowSpeedLines(false);
+                }, 4000);
+                return 1;
+              }
+              return prev + 0.0005; // Mantém a velocidade original
+            });
+          }, 50);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.body.style.overflow = "auto";
+    };
+  }, [sendRocket, setTheme]);
 
   if (!mounted) return null;
 
@@ -54,25 +128,25 @@ export default function BackgroundScene({
 
   // Variantes de animação para o sol
   const sunVariants = {
-    hidden: { 
+    hidden: {
       x: "400%",
       y: "400%",
       opacity: 0,
     },
-    visible: { 
+    visible: {
       x: 0,
       y: 0,
       opacity: 1,
-      transition: { 
+      transition: {
         duration: 2.5,
         ease: [0.4, 0, 0.2, 1],
       },
     },
-    exit: { 
+    exit: {
       x: "-400%",
       y: "-400%",
       opacity: 0,
-      transition: { 
+      transition: {
         duration: 2.5,
         ease: [0.4, 0, 0.2, 1],
       },
@@ -81,25 +155,25 @@ export default function BackgroundScene({
 
   // Variantes de animação para a lua
   const moonVariants = {
-    hidden: { 
+    hidden: {
       x: "400%",
       y: "400%",
       opacity: 0,
     },
-    visible: { 
+    visible: {
       x: 0,
       y: 0,
       opacity: 1,
-      transition: { 
+      transition: {
         duration: 2.5,
         ease: [0.4, 0, 0.2, 1],
       },
     },
-    exit: { 
+    exit: {
       x: "-400%",
       y: "-400%",
       opacity: 0,
-      transition: { 
+      transition: {
         duration: 2.5,
         ease: [0.4, 0, 0.2, 1],
       },
@@ -122,9 +196,42 @@ export default function BackgroundScene({
 
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
+        {/* Linhas de velocidade */}
+        <AnimatePresence>
+          {showSpeedLines && (
+            <>
+              {speedLines.map((line) => (
+                <motion.div
+                  key={line.id}
+                  className="absolute w-1 bg-white/30"
+                  initial={{
+                    top: -100,
+                    left: `${line.left}%`,
+                    height: line.height,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    top: "100%",
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    repeat: Infinity,
+                    delay: line.delay,
+                    ease: "linear",
+                  }}
+                  style={{
+                    opacity: Math.min(1, spaceDepth * 2) * (1 - spaceDepth),
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </AnimatePresence>
+
         {/* Transição do Sol */}
         <AnimatePresence>
-          {(!isDark || isChangingToLight) && (
+          {(!isDark || isChangingToLight) && !isInSpace && (
             <motion.div
               className="sun"
               variants={sunVariants}
@@ -137,7 +244,7 @@ export default function BackgroundScene({
 
         {/* Transição da Lua */}
         <AnimatePresence>
-          {(isDark || isChangingToDark) && (
+          {(isDark || isChangingToDark) && !isInSpace && (
             <motion.div
               className="moon"
               variants={moonVariants}
@@ -150,7 +257,7 @@ export default function BackgroundScene({
 
         {/* Nuvens (apenas no modo claro ou durante a transição para escuro na fase inicial) */}
         <AnimatePresence>
-          {(!isDark || (isChangingToDark && !mounted)) && (
+          {(!isDark || (isChangingToDark && !mounted)) && !isInSpace && (
             <>
               <motion.div
                 className="cloud cloud-1"
@@ -179,16 +286,19 @@ export default function BackgroundScene({
 
         {/* Estrelas (apenas no modo escuro ou durante a transição para claro na fase inicial) */}
         <AnimatePresence>
-          {(isDark || isChangingToLight) && (
+          {(isDark || isChangingToLight || isInSpace) && !showBlackHole && (
             <>
               {stars.map((star) => (
                 <motion.div
                   key={star.id}
                   className="star"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.8 }}
+                  animate={{
+                    opacity: isInSpace ? 1 : 0.8,
+                    scale: isInSpace ? 1.5 : 1,
+                  }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 1.5 }}
+                  transition={{ duration: 3.0 }}
                   style={{
                     position: "absolute",
                     width: `${star.size}px`,
@@ -199,6 +309,7 @@ export default function BackgroundScene({
                     boxShadow: `0 0 ${star.size + 1}px white`,
                     borderRadius: "50%",
                     background: "white",
+                    opacity: Math.max(0, 1 - spaceDepth * 2.5), // Aumentado para 2.5 para sumir mais cedo
                   }}
                 />
               ))}
@@ -213,80 +324,11 @@ export default function BackgroundScene({
             background: isDark
               ? "linear-gradient(to bottom, #2c5218 0%, #1e3812 100%)"
               : "linear-gradient(to bottom, #4c8c2b 0%, #3a6d20 100%)",
+            y: isSucking ? 1000 : 0,
+            opacity: isSucking ? 0 : 1,
           }}
-          transition={{ duration: 2 }}
+          transition={{ duration: 4.0 }}
         />
-
-        {/* Pessoa fazendo piquenique (modo claro) */}
-        <AnimatePresence>
-          {(!isDark || isChangingToDark) && (
-            <motion.div
-              className="picnic-scene"
-              initial={{
-                opacity: isChangingToLight ? 0 : 1,
-                y: isChangingToLight ? 20 : 0,
-              }}
-              animate={{
-                opacity: isChangingToDark ? 0 : 1,
-                y: isChangingToDark ? 20 : 0,
-              }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 1.5 }}
-            >
-              {/* Toalha de piquenique */}
-              <div className="picnic-blanket" />
-
-              {/* Pessoa */}
-              <div className="picnic-person">
-                <div className="person-head" />
-                <div className="person-body" />
-                <div className="person-arm-left" />
-                <div className="person-arm-right" />
-                <div className="person-leg-left" />
-                <div className="person-leg-right" />
-              </div>
-
-              {/* Cesta de piquenique */}
-              <div className="picnic-basket">
-                <div className="basket-handle" />
-                <div className="basket-body" />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Barraca de acampamento (modo escuro) */}
-        <AnimatePresence>
-          {(isDark || isChangingToLight) && (
-            <motion.div
-              className="camping-scene"
-              initial={{
-                opacity: isChangingToDark ? 0 : 1,
-                y: isChangingToDark ? 20 : 0,
-              }}
-              animate={{
-                opacity: isChangingToLight ? 0 : 1,
-                y: isChangingToLight ? 20 : 0,
-              }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 1.5 }}
-            >
-              {/* Barraca */}
-              <div className="tent">
-                <div className="tent-body" />
-                <div className="tent-door" />
-                <div className="tent-window" />
-              </div>
-
-              {/* Fogueira */}
-              <div className="campfire">
-                <div className="fire-base" />
-                <div className="fire-flame" />
-                <div className="fire-glow" />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Foguete */}
         <AnimatePresence>
@@ -294,10 +336,39 @@ export default function BackgroundScene({
             <motion.div
               className="rocket"
               initial={{ y: 0 }}
-              animate={{ y: "-500%" }}
-              exit={{ y: "-2000%" }}
-              transition={{ duration: 2.0 }}
+              animate={{
+                y: isInSpace ? -2000 : -scrollPosition,
+                opacity: [1, 1, 0],
+                scale: [1, 1.2, 0.8],
+              }}
+              transition={{
+                duration: showBlackHole ? 0.5 : 4.0,
+                times: [0, 0.7, 1],
+                ease: showBlackHole ? "easeOut" : "easeInOut",
+              }}
             />
+          )}
+        </AnimatePresence>
+
+        {/* Buraco Negro */}
+        <AnimatePresence>
+          {showBlackHole && (
+            <motion.div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                rotate: 360,
+              }}
+              transition={{
+                duration: 6.0,
+                ease: "easeOut",
+              }}
+            >
+              <div className="w-64 h-64 rounded-full bg-black shadow-[0_0_50px_#000,inset_0_0_50px_#000]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-900 via-black to-purple-900 opacity-50 animate-spin" />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
