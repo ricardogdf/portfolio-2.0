@@ -40,12 +40,12 @@ export default function BackgroundScene({
   // Gera estrelas aleatórias para o céu noturno
   const stars = useMemo(() => {
     const starsArray = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 300; i++) {
       const size = Math.random() * 3 + 1;
       starsArray.push({
         id: i,
         size,
-        top: Math.random() * 300,
+        top: Math.random() * 100,
         left: Math.random() * 100,
         delay: Math.random() * 3,
       });
@@ -320,7 +320,7 @@ export default function BackgroundScene({
                     position: "absolute",
                     width: `${star.size}px`,
                     height: `${star.size}px`,
-                    top: `${star.top}px`,
+                    top: `${star.top}%`,
                     left: `${star.left}%`,
                     animationDelay: `${star.delay}s`,
                     boxShadow: `0 0 ${star.size + 1}px white`,
@@ -393,20 +393,26 @@ export default function BackgroundScene({
         <AnimatePresence>
           {showBlackHole && (
             <motion.div
-              initial={{ y: 0, x: 1 }}
-              animate={{
-                y: [0, 0, "-45vh", "10vh", "-150vh", "-150vh"],
-                x: [0, 0, 0, "-25vw", 0, 0],
-                scale: [0, 1, 1, 1, 4, 4],
-                opacity: [0, 1, 1, 1, 1, 0],
-              }}
-              transition={{
-                duration: 10.0,
-                times: [0, 0.2, 0.4, 0.6, 0.8, 1],
-                ease: "easeInOut",
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <Crosshair />
+              <motion.div
+                initial={{ y: 0, x: 0, scale: 0, opacity: 0 }}
+                animate={{
+                  y: [0, 0, "-45vh", "10vh", "-150vh", "-150vh"],
+                  x: [0, 0, 0, "-25vw", 0, 0],
+                  scale: [0, 1, 1, 1, 4, 4],
+                  opacity: [0, 1, 1, 1, 1, 0],
+                }}
+                transition={{
+                  duration: 10.0,
+                  times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+                  ease: "easeInOut",
+                }}
+              >
+                <Crosshair />
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
