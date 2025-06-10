@@ -8,8 +8,10 @@ import { motion } from "framer-motion";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
@@ -17,6 +19,8 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (!mounted) return null;
 
   return (
     <motion.header
@@ -28,6 +32,7 @@ export default function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
+      style={{ willChange: 'transform' }}
     >
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="font-bold text-xl relative group">

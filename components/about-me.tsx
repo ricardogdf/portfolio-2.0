@@ -2,8 +2,17 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function AboutMe() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <section className="py-12">
       <div className="mx-auto max-w-5xl px-4">
@@ -11,14 +20,16 @@ export default function AboutMe() {
           className="flex flex-col md:flex-row items-center md:items-start gap-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'transform, opacity' }}
         >
           {/* Foto */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
             className="w-full md:w-1/3 flex justify-center"
+            style={{ willChange: 'transform, opacity' }}
           >
             <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-primary/20">
               <Image
@@ -26,6 +37,7 @@ export default function AboutMe() {
                 alt="Sua foto"
                 fill
                 className="object-cover"
+                priority
               />
             </div>
           </motion.div>
@@ -35,7 +47,8 @@ export default function AboutMe() {
             className="w-full md:w-2/3 text-center md:text-left"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+            style={{ willChange: 'opacity' }}
           >
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400 animate-gradient-x mb-6">
               Olá, eu sou o Ricardo

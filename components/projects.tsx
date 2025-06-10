@@ -49,7 +49,8 @@ export default function Projects() {
           className="mb-8 text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'transform, opacity' }}
         >
           Projetos
         </motion.h2>
@@ -59,7 +60,8 @@ export default function Projects() {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.2, duration: 0.5 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+              style={{ willChange: 'transform, opacity' }}
             >
               <Card className="card-hover border border-primary/10 h-full flex flex-col overflow-hidden">
                 <div className="relative h-48 w-full overflow-hidden">

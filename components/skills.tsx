@@ -26,7 +26,8 @@ export default function Skills() {
           className="mb-8 text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'transform, opacity' }}
         >
           Habilidades Técnicas
         </motion.h2>
@@ -34,7 +35,8 @@ export default function Skills() {
           className="flex flex-wrap justify-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'opacity' }}
         >
           {skills.map((skill, index) => (
             <motion.span
@@ -42,8 +44,9 @@ export default function Skills() {
               className="skill-badge"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
+              transition={{ delay: index * 0.03, duration: 0.2 }}
               whileHover={{ y: -4 }}
+              style={{ willChange: 'transform, opacity' }}
             >
               {skill}
             </motion.span>

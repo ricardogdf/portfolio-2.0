@@ -1,10 +1,35 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BlackHole from "./black-hole";
 import Crosshair from "./crosshair";
+
+// Função para gerar elementos aleatórios de forma consistente
+const generateElements = (seed: number) => {
+  const random = (min: number, max: number) => {
+    const x = Math.sin(seed++) * 10000;
+    return min + (x - Math.floor(x)) * (max - min);
+  };
+
+  const speedLines = Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    left: random(0, 100),
+    height: random(50, 150),
+    delay: random(0, 3),
+  }));
+
+  const stars = Array.from({ length: 150 }, (_, i) => ({
+    id: i,
+    size: random(1, 4),
+    top: random(0, 100),
+    left: random(0, 100),
+    delay: random(0, 3),
+  }));
+
+  return { speedLines, stars };
+};
 
 export default function BackgroundScene({
   sendRocket,
@@ -13,8 +38,7 @@ export default function BackgroundScene({
   sendRocket: boolean;
   isSucking: boolean;
 }) {
-  const { theme, resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isInSpace, setIsInSpace] = useState(false);
@@ -22,45 +46,18 @@ export default function BackgroundScene({
   const [showSpeedLines, setShowSpeedLines] = useState(false);
   const [spaceDepth, setSpaceDepth] = useState(0);
   const [isSpeedLinesExiting, setIsSpeedLinesExiting] = useState(false);
+  const elementsRef = useRef<{ speedLines: any[], stars: any[] } | null>(null);
 
-  // Gera linhas de velocidade
-  const speedLines = useMemo(() => {
-    const lines = [];
-    for (let i = 0; i < 30; i++) {
-      lines.push({
-        id: i,
-        left: Math.random() * 100,
-        height: Math.random() * 100 + 50,
-        delay: Math.random() * 3,
-      });
+  // Gera elementos apenas uma vez no cliente
+  useLayoutEffect(() => {
+    if (!elementsRef.current) {
+      elementsRef.current = generateElements(Date.now());
     }
-    return lines;
-  }, []);
-
-  // Gera estrelas aleatórias para o céu noturno
-  const stars = useMemo(() => {
-    const starsArray = [];
-    for (let i = 0; i < 300; i++) {
-      const size = Math.random() * 3 + 1;
-      starsArray.push({
-        id: i,
-        size,
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-        delay: Math.random() * 3,
-      });
-    }
-    return starsArray;
-  }, []);
-
-  // Evita problemas de hidratação
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   // Detecta mudanças de tema para iniciar a transição
   useEffect(() => {
-    if (!mounted || !resolvedTheme) return;
+    if (!resolvedTheme) return;
 
     setIsTransitioning(true);
     const timer = setTimeout(() => {
@@ -68,7 +65,7 @@ export default function BackgroundScene({
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [resolvedTheme, mounted]);
+  }, [resolvedTheme]);
 
   // Monitora o scroll e controla o efeito de sucção
   useEffect(() => {
@@ -77,34 +74,22 @@ export default function BackgroundScene({
       setScrollPosition(currentScroll);
 
       if (sendRocket) {
-        // Calcula a profundidade do espaço baseada na posição do scroll
-        const maxScroll =
-          document.documentElement.scrollHeight - window.innerHeight;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         const scrollProgress = 1 - currentScroll / maxScroll;
-
-        // Ajusta a progressão para ser gradual
         const adjustedProgress = Math.pow(scrollProgress, 1.5);
         setSpaceDepth(adjustedProgress);
 
-        // Ativa o efeito espacial quando chegar ao topo
         if (currentScroll < 10) {
           setIsInSpace(true);
-          setTheme("dark"); // Força o tema escuro
-
-          // Desabilita o scroll
+          setTheme("dark");
           document.body.style.overflow = "hidden";
-
-          // Mostra as linhas de velocidade
           setShowSpeedLines(true);
 
-          // Continua a transição para o espaço profundo
           const spaceTransition = setInterval(() => {
             setSpaceDepth((prev) => {
               if (prev >= 1) {
                 clearInterval(spaceTransition);
-                // Inicia o efeito de saída das linhas de velocidade
                 setIsSpeedLinesExiting(true);
-                // Mostra o buraco negro quando atingir o espaço profundo
                 setTimeout(() => {
                   setTimeout(() => {
                     setShowBlackHole(true);
@@ -113,7 +98,7 @@ export default function BackgroundScene({
                 }, 6000);
                 return 1;
               }
-              return prev + 0.0005; // Mantém a velocidade original
+              return prev + 0.0005;
             });
           }, 50);
         }
@@ -126,8 +111,6 @@ export default function BackgroundScene({
       document.body.style.overflow = "auto";
     };
   }, [sendRocket, setTheme]);
-
-  if (!mounted) return null;
 
   const isDark = resolvedTheme === "dark";
   const isChangingToDark = isTransitioning && resolvedTheme === "dark";
@@ -187,6 +170,9 @@ export default function BackgroundScene({
     },
   };
 
+  // Se os elementos ainda não foram gerados, retorna null
+  if (!elementsRef.current) return null;
+
   return (
     <div className="fixed inset-0 w-full h-full z-0 overflow-hidden">
       {/* Fundo do céu com transição */}
@@ -201,6 +187,7 @@ export default function BackgroundScene({
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
         transition={{ duration: isInSpace ? 3.5 : 2.5 }}
+        style={{ willChange: 'background' }}
       />
 
       {/* Container para o sol e a lua */}
@@ -209,7 +196,7 @@ export default function BackgroundScene({
         <AnimatePresence>
           {showSpeedLines && (
             <>
-              {speedLines.map((line) => (
+              {elementsRef.current.speedLines.map((line) => (
                 <motion.div
                   key={line.id}
                   className="absolute w-1 bg-white/30"
@@ -239,6 +226,7 @@ export default function BackgroundScene({
                   }}
                   style={{
                     opacity: Math.min(1, spaceDepth * 2) * (1 - spaceDepth),
+                    willChange: 'transform, opacity'
                   }}
                 />
               ))}
@@ -255,6 +243,7 @@ export default function BackgroundScene({
               initial="hidden"
               animate="visible"
               exit="exit"
+              style={{ willChange: 'transform, opacity' }}
             />
           )}
         </AnimatePresence>
@@ -268,13 +257,14 @@ export default function BackgroundScene({
               initial="hidden"
               animate="visible"
               exit="exit"
+              style={{ willChange: 'transform, opacity' }}
             />
           )}
         </AnimatePresence>
 
-        {/* Nuvens (apenas no modo claro ou durante a transição para escuro na fase inicial) */}
+        {/* Nuvens */}
         <AnimatePresence>
-          {(!isDark || (isChangingToDark && !mounted)) && !isInSpace && (
+          {(!isDark || (isChangingToDark)) && !isInSpace && (
             <>
               <motion.div
                 className="cloud cloud-1"
@@ -282,6 +272,7 @@ export default function BackgroundScene({
                 animate={{ opacity: isChangingToDark ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 2.5 }}
+                style={{ willChange: 'opacity' }}
               />
               <motion.div
                 className="cloud cloud-2"
@@ -289,6 +280,7 @@ export default function BackgroundScene({
                 animate={{ opacity: isChangingToDark ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 2.5, delay: 0.1 }}
+                style={{ willChange: 'opacity' }}
               />
               <motion.div
                 className="cloud cloud-3"
@@ -296,16 +288,17 @@ export default function BackgroundScene({
                 animate={{ opacity: isChangingToDark ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 2.5, delay: 0.2 }}
+                style={{ willChange: 'opacity' }}
               />
             </>
           )}
         </AnimatePresence>
 
-        {/* Estrelas (apenas no modo escuro ou durante a transição para claro na fase inicial) */}
+        {/* Estrelas */}
         <AnimatePresence>
           {(isDark || isChangingToLight || isInSpace) && (
             <>
-              {stars.map((star) => (
+              {elementsRef.current.stars.map((star) => (
                 <motion.div
                   key={star.id}
                   className="star"
@@ -326,7 +319,8 @@ export default function BackgroundScene({
                     boxShadow: `0 0 ${star.size + 1}px white`,
                     borderRadius: "50%",
                     background: "white",
-                    opacity: isInSpace ? 0 : Math.max(0, 1 - spaceDepth * 2.5), // Aumentado para 2.5 para sumir mais cedo
+                    opacity: isInSpace ? 0 : Math.max(0, 1 - spaceDepth * 2.5),
+                    willChange: 'transform, opacity'
                   }}
                 />
               ))}
@@ -334,7 +328,7 @@ export default function BackgroundScene({
           )}
         </AnimatePresence>
 
-        {/* Gramado (presente em ambos os temas) */}
+        {/* Gramado */}
         <motion.div
           className="grass"
           animate={{
@@ -345,6 +339,7 @@ export default function BackgroundScene({
             opacity: isSucking ? 0 : 1,
           }}
           transition={{ duration: 4.0 }}
+          style={{ willChange: 'transform, opacity, background' }}
         />
 
         {/* Foguete */}
@@ -363,6 +358,7 @@ export default function BackgroundScene({
                 times: [0, 0.7, 1],
                 ease: showBlackHole ? "easeOut" : "easeInOut",
               }}
+              style={{ willChange: 'transform, opacity' }}
             />
           )}
         </AnimatePresence>
@@ -383,6 +379,7 @@ export default function BackgroundScene({
                 times: [0, 0.5, 0.75, 1],
                 ease: "easeInOut",
               }}
+              style={{ willChange: 'transform, opacity' }}
             >
               <BlackHole />
             </motion.div>
@@ -396,6 +393,7 @@ export default function BackgroundScene({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
+              style={{ willChange: 'opacity' }}
             >
               <motion.div
                 initial={{ y: 0, x: 0, scale: 0, opacity: 0 }}
@@ -410,6 +408,7 @@ export default function BackgroundScene({
                   times: [0, 0.2, 0.4, 0.6, 0.8, 1],
                   ease: "easeInOut",
                 }}
+                style={{ willChange: 'transform, opacity' }}
               >
                 <Crosshair />
               </motion.div>

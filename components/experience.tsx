@@ -57,7 +57,8 @@ export default function Experience() {
           className="mb-8 text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'transform, opacity' }}
         >
           Experiência Profissional
         </motion.h2>
@@ -67,8 +68,9 @@ export default function Experience() {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.2, duration: 0.5 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
               className="bg-card border border-primary/10 rounded-lg overflow-hidden"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div
                 className="p-4 flex items-center justify-between cursor-pointer"
@@ -103,8 +105,9 @@ export default function Experience() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
                     className="overflow-hidden"
+                    style={{ willChange: 'height, opacity' }}
                   >
                     <div className="p-4 pt-2 border-t border-primary/10">
                       <div className="grid gap-4">
