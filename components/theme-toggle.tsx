@@ -37,10 +37,10 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full"
+      className="rounded-full hover:bg-primary/10 hover:text-primary"
       aria-label="Alternar tema"
       disabled={isChanging}
     >

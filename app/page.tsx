@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/header";
 import AboutMe from "@/components/about-me";
 import Experience from "@/components/experience";
 import Projects from "@/components/projects";
@@ -8,6 +7,8 @@ import Skills from "@/components/skills";
 import BackgroundScene from "@/components/background-scene";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import SocialLinks from "@/components/social-links";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
   const [sendRocket, setSendRocket] = useState(false);
@@ -45,13 +46,21 @@ export default function Home() {
           ease: "easeIn",
         }}
       >
-        <Header />
-        <main className="container mx-auto px-4 py-12">
+        <main className="container mx-auto px-4">
+          <motion.div className="w-[220px] z-[999] border border-slate-500 bg-white dark:bg-slate-900 p-1 rounded-full fixed bottom-5 left-[calc(50vw-110px)] flex items-center justify-between"
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            style={{ willChange: 'transform, opacity' }}>
+            <SocialLinks />
+            <div className="h-4 w-px bg-slate-800 dark:bg-slate-100" />
+            <ThemeToggle />
+          </motion.div>
           <AboutMe />
           <Skills />
           <Experience />
           <Projects />
-          <div className="flex justify-center">
+          <div className="h-screen flex justify-center">
             <button
               onClick={handleButtonClick}
               className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
@@ -61,11 +70,6 @@ export default function Home() {
             </button>
           </div>
         </main>
-        <footer className="border-t py-6 bg-background/50 backdrop-blur-sm">
-          <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} - Todos os direitos reservados
-          </div>
-        </footer>
       </motion.div>
     </div>
   );

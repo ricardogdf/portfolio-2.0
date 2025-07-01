@@ -20,10 +20,10 @@ export default function Skills() {
   ];
 
   return (
-    <section className="py-12" id="habilidades">
+    <section className="pb-12" id="habilidades">
       <div className="mx-auto max-w-6xl">
         <motion.h2
-          className="mb-8 text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400"
+          className="mb-8 text-center text-3xl font-bold"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}

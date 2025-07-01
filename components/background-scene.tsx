@@ -328,26 +328,12 @@ export default function BackgroundScene({
           )}
         </AnimatePresence>
 
-        {/* Gramado */}
-        <motion.div
-          className="grass"
-          animate={{
-            background: isDark
-              ? "linear-gradient(to bottom, #2c5218 0%, #1e3812 100%)"
-              : "linear-gradient(to bottom, #4c8c2b 0%, #3a6d20 100%)",
-            y: isSucking ? 1000 : 0,
-            opacity: isSucking ? 0 : 1,
-          }}
-          transition={{ duration: 4.0 }}
-          style={{ willChange: 'transform, opacity, background' }}
-        />
-
         {/* Foguete */}
         <AnimatePresence>
           {sendRocket && (
             <motion.div
               className="rocket"
-              initial={{ y: 0 }}
+              initial={{ y: 100 }}
               animate={{
                 y: isInSpace ? -2000 : -scrollPosition,
                 opacity: [1, 1, 0],
