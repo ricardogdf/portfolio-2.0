@@ -3,8 +3,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import BlackHole from "./black-hole";
-import Crosshair from "./crosshair";
 
 // Função para gerar elementos aleatórios de forma consistente
 const generateElements = (seed: number) => {
@@ -183,7 +181,7 @@ export default function BackgroundScene({
           background: isInSpace
             ? "linear-gradient(to bottom, #000000 100%, #0c1445 100%)"
             : isDark
-            ? "linear-gradient(to bottom, #0c1445 0%, #1a2980 100%)"
+            ? "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
         transition={{ duration: isInSpace ? 3.5 : 2.5 }}
@@ -346,59 +344,6 @@ export default function BackgroundScene({
               }}
               style={{ willChange: 'transform, opacity' }}
             />
-          )}
-        </AnimatePresence>
-
-        {/* Buraco Negro */}
-        <AnimatePresence>
-          {showBlackHole && (
-            <motion.div
-              initial={{ y: 0, x: 0, scale: 0.1, opacity: 0.1 }}
-              animate={{
-                y: [0, 0, "50vh", 0],
-                x: [0, 0, "-25vw", 0],
-                scale: [0.1, 0.1, 0.2, 1],
-                opacity: [0.1, 1, 1, 1],
-              }}
-              transition={{
-                duration: 8.0,
-                times: [0, 0.5, 0.75, 1],
-                ease: "easeInOut",
-              }}
-              style={{ willChange: 'transform, opacity' }}
-            >
-              <BlackHole />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Mira */}
-        <AnimatePresence>
-          {showBlackHole && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              style={{ willChange: 'opacity' }}
-            >
-              <motion.div
-                initial={{ y: 0, x: 0, scale: 0, opacity: 0 }}
-                animate={{
-                  y: [0, 0, "-45vh", "10vh", "-150vh", "-150vh"],
-                  x: [0, 0, 0, "-25vw", 0, 0],
-                  scale: [0, 1, 1, 1, 4, 4],
-                  opacity: [0, 1, 1, 1, 1, 0],
-                }}
-                transition={{
-                  duration: 10.0,
-                  times: [0, 0.2, 0.4, 0.6, 0.8, 1],
-                  ease: "easeInOut",
-                }}
-                style={{ willChange: 'transform, opacity' }}
-              >
-                <Crosshair />
-              </motion.div>
-            </motion.div>
           )}
         </AnimatePresence>
       </div>

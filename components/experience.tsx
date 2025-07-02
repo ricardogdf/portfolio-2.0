@@ -60,7 +60,7 @@ export default function Experience() {
           transition={{ duration: 0.3 }}
           style={{ willChange: 'transform, opacity' }}
         >
-          Experiência Profissional
+          Work Experience
         </motion.h2>
         <div className="grid gap-4">
           {experiences.map((exp, index) => (

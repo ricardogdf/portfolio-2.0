@@ -29,7 +29,7 @@ export default function Skills() {
           transition={{ duration: 0.3 }}
           style={{ willChange: 'transform, opacity' }}
         >
-          Habilidades Técnicas
+          Skills
         </motion.h2>
         <motion.div
           className="flex flex-wrap justify-center gap-3"
