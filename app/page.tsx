@@ -7,16 +7,14 @@ import Skills from "@/components/skills";
 import BackgroundScene from "@/components/background-scene";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import SocialLinks from "@/components/social-links";
-import { ThemeToggle } from "@/components/theme-toggle";
 import Actions from "@/components/actions";
 
 export default function Home() {
-  const [sendRocket, setSendRocket] = useState(false);
-  const [isSucking, setIsSucking] = useState(false);
+  const [openPortal, setOpenPortal] = useState(false);
+  const [bugEffect, setBugEffect] = useState(false);
 
   const handleButtonClick = () => {
-    setSendRocket(true);
+    setOpenPortal(true);
     // Scroll mais lento para o topo
     const scrollToTop = () => {
       const currentPosition = window.scrollY;
@@ -26,7 +24,13 @@ export default function Home() {
       } else {
         // Inicia o efeito de sucção quando chegar ao topo
         setTimeout(() => {
-          setIsSucking(true);
+          setBugEffect(true);
+          setTimeout(() => setBugEffect(false), 1000);
+          setTimeout(() => setBugEffect(true), 2000);
+          setTimeout(() => setBugEffect(false), 2500);
+          setTimeout(() => setBugEffect(true), 3000);
+          setTimeout(() => setBugEffect(false), 3300);
+          setTimeout(() => setBugEffect(true), 3500);
         }, 1000);
       }
     };
@@ -35,12 +39,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <BackgroundScene sendRocket={sendRocket} isSucking={isSucking} />
+      <BackgroundScene bugEffect={bugEffect}/>
       <motion.div
         className="relative z-10"
         animate={{
-          y: isSucking ? 1000 : 0,
-          opacity: isSucking ? 0 : 1,
+          y: 0,
+          opacity: 1,
         }}
         transition={{
           duration: 2,
@@ -48,21 +52,22 @@ export default function Home() {
         }}
       >
         <main className="container mx-auto px-4">
-          <AboutMe />
+          <AboutMe bugEffect={bugEffect} openPortal={openPortal} />
           <Skills />
           <Experience />
           <Projects />
           <section className="h-screen flex justify-center">
-            <button
-              onClick={handleButtonClick}
-              className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
-              disabled={sendRocket}
-            >
-              []
-            </button>
+            {!openPortal ?
+              (<button
+                onClick={handleButtonClick}
+                className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
+              >
+                []
+              </button>)
+              : ('bill')}
           </section>
         </main>
-        <Actions/>
+        <Actions />
       </motion.div>
     </div>
   );
