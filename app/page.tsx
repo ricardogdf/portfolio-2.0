@@ -17,7 +17,13 @@ const SECTIONS = [
   { id: "final", label: "Final" },
 ];
 
-function DiamondNav({ activeSection, onNavigate }: { activeSection: string; onNavigate: (id: string) => void }) {
+function DiamondNav({
+  activeSection,
+  onNavigate,
+}: {
+  activeSection: string;
+  onNavigate: (id: string) => void;
+}) {
   return (
     <div className="fixed right-6 top-1/2 z-50 flex flex-col gap-4 -translate-y-1/2">
       {SECTIONS.map((section) => (
@@ -45,7 +51,7 @@ export default function Home() {
   // Scroll snapping e detecção de seção visível
   useEffect(() => {
     const handleScroll = () => {
-      const offsets = sectionRefs.map(ref => {
+      const offsets = sectionRefs.map((ref) => {
         if (!ref.current) return Infinity;
         const rect = ref.current.getBoundingClientRect();
         return Math.abs(rect.top - window.innerHeight / 4);
@@ -59,7 +65,7 @@ export default function Home() {
   }, []);
 
   const handleNavigate = (id: string) => {
-    const idx = SECTIONS.findIndex(s => s.id === id);
+    const idx = SECTIONS.findIndex((s) => s.id === id);
     const ref = sectionRefs[idx];
     if (ref && ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -92,7 +98,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <BackgroundScene bugEffect={bugEffect}/>
+      <BackgroundScene bugEffect={bugEffect} />
       <DiamondNav activeSection={activeSection} onNavigate={handleNavigate} />
       <motion.div
         className="relative z-10"
@@ -100,11 +106,39 @@ export default function Home() {
         transition={{ duration: 2, ease: "easeIn" }}
       >
         <main className="container mx-auto px-4 snap-y snap-mandatory h-screen overflow-y-scroll scrollbar-hide">
-          <section ref={sectionRefs[0]} id="about" className="snap-start min-h-screen flex items-center"><AboutMe bugEffect={bugEffect} openPortal={openPortal} /></section>
-          <section ref={sectionRefs[1]} id="skills" className="snap-start min-h-screen flex items-center"><Skills /></section>
-          <section ref={sectionRefs[2]} id="experience" className="snap-start min-h-screen flex items-center"><Experience /></section>
-          <section ref={sectionRefs[3]} id="projects" className="snap-start min-h-screen flex items-center"><Projects /></section>
-          <section ref={sectionRefs[4]} id="final" className="snap-start min-h-screen flex justify-center items-center">
+          <section
+            ref={sectionRefs[0]}
+            id="about"
+            className="snap-start min-h-screen flex items-center"
+          >
+            <AboutMe bugEffect={bugEffect} openPortal={openPortal} />
+          </section>
+          <section
+            ref={sectionRefs[1]}
+            id="skills"
+            className="snap-start min-h-screen flex items-center"
+          >
+            <Skills />
+          </section>
+          <section
+            ref={sectionRefs[2]}
+            id="experience"
+            className="snap-start min-h-screen flex items-center"
+          >
+            <Experience />
+          </section>
+          <section
+            ref={sectionRefs[3]}
+            id="projects"
+            className="snap-start min-h-screen flex items-center"
+          >
+            <Projects />
+          </section>
+          <section
+            ref={sectionRefs[4]}
+            id="final"
+            className="snap-start min-h-screen flex justify-center items-center"
+          >
             {!openPortal ? (
               <button
                 onClick={handleButtonClick}
@@ -112,7 +146,9 @@ export default function Home() {
               >
                 []
               </button>
-            ) : ("bill")}
+            ) : (
+              "bill"
+            )}
           </section>
         </main>
         <Actions />
