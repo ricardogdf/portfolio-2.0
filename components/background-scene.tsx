@@ -11,9 +11,9 @@ const generateElements = (seed: number) => {
     return min + (x - Math.floor(x)) * (max - min);
   };
 
-  const stars = Array.from({ length: 150 }, (_, i) => ({
+  const stars = Array.from({ length: 500 }, (_, i) => ({
     id: i,
-    size: random(1, 4),
+    size: random(0.5, 2.5),
     top: random(0, 100),
     left: random(0, 100),
     delay: random(0, 3),
@@ -121,12 +121,11 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
         transition={{ duration: bugEffect ? 1 : 2.5 }}
-        style={{ willChange: 'background' }}
+        style={{ willChange: "background" }}
       />
 
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
-
         {/* Transição do Sol */}
         {!bugEffect && (
           <AnimatePresence>
@@ -137,7 +136,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                style={{ willChange: 'transform, opacity' }}
+                style={{ willChange: "transform, opacity" }}
               />
             )}
           </AnimatePresence>
@@ -153,7 +152,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                style={{ willChange: 'transform, opacity' }}
+                style={{ willChange: "transform, opacity" }}
               />
             )}
           </AnimatePresence>
@@ -162,7 +161,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         {/* Nuvens */}
         {!bugEffect && (
           <AnimatePresence>
-            {(!isDark || (isChangingToDark)) && !bugEffect && (
+            {(!isDark || isChangingToDark) && !bugEffect && (
               <>
                 <motion.div
                   className="cloud cloud-1"
@@ -170,7 +169,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                   animate={{ opacity: isChangingToDark ? 0 : 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 2.5 }}
-                  style={{ willChange: 'opacity' }}
+                  style={{ willChange: "opacity" }}
                 />
                 <motion.div
                   className="cloud cloud-2"
@@ -178,7 +177,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                   animate={{ opacity: isChangingToDark ? 0 : 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 2.5, delay: 0.1 }}
-                  style={{ willChange: 'opacity' }}
+                  style={{ willChange: "opacity" }}
                 />
                 <motion.div
                   className="cloud cloud-3"
@@ -186,7 +185,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                   animate={{ opacity: isChangingToDark ? 0 : 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 2.5, delay: 0.2 }}
-                  style={{ willChange: 'opacity' }}
+                  style={{ willChange: "opacity" }}
                 />
               </>
             )}
@@ -196,7 +195,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         {/* Estrelas */}
         {!bugEffect && (
           <AnimatePresence>
-            {(isDark || isChangingToLight || !bugEffect) && (
+            {(isDark || isChangingToLight) && (
               <>
                 {elementsRef.current.stars.map((star) => (
                   <motion.div
@@ -220,7 +219,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
                       borderRadius: "50%",
                       background: "white",
                       opacity: Math.max(0, 2.5),
-                      willChange: 'transform, opacity'
+                      willChange: "transform, opacity",
                     }}
                   />
                 ))}
