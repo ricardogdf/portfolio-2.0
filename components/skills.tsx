@@ -10,13 +10,10 @@ export default function Skills() {
     "Next.js",
     "Node.js",
     "Express",
-    "HTML",
-    "CSS",
-    "Tailwind",
     "Git",
-    "PostgreSQL",
-    "GraphQL",
-    "Redux",
+    "Github",
+    "Postgres",
+    "Oracle",
   ];
 
   return (
