@@ -114,10 +114,12 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         className="absolute inset-0 w-full h-full"
         initial={false}
         animate={{
-          background: bugEffect
-            ? "black"
-            : isDark
-            ? "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
+          background: isDark
+            ? bugEffect
+              ? "black"
+              : "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
+            : bugEffect
+            ? "white"
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
         transition={{ duration: bugEffect ? 1 : 2.5 }}
