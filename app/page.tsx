@@ -8,6 +8,7 @@ import BackgroundScene from "@/components/background-scene";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Actions from "@/components/actions";
+import DiamondNav from "@/components/diamond-nav";
 
 const SECTIONS = [
   { id: "about", label: "Sobre" },
@@ -16,31 +17,6 @@ const SECTIONS = [
   { id: "projects", label: "Projetos" },
   { id: "final", label: "Final" },
 ];
-
-function DiamondNav({
-  activeSection,
-  onNavigate,
-}: {
-  activeSection: string;
-  onNavigate: (id: string) => void;
-}) {
-  return (
-    <div className="fixed right-6 top-1/2 z-50 flex flex-col gap-4 -translate-y-1/2">
-      {SECTIONS.map((section) => (
-        <button
-          key={section.id}
-          aria-label={section.label}
-          onClick={() => onNavigate(section.id)}
-          className={`w-6 h-6 rotate-45 border-2 transition-all duration-300 ${
-            activeSection === section.id
-              ? "bg-primary border-primary shadow-lg scale-110"
-              : "bg-background border-muted opacity-60 hover:scale-105"
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
 
 export default function Home() {
   const [openPortal, setOpenPortal] = useState(false);
@@ -69,37 +45,29 @@ export default function Home() {
     const ref = sectionRefs[idx];
     if (ref && ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      setActiveSection(id);
     }
   };
 
   const handleButtonClick = () => {
     setOpenPortal(true);
-    // Scroll mais lento para o topo
-    const scrollToTop = () => {
-      const currentPosition = window.scrollY;
-      if (currentPosition > 0) {
-        window.scrollTo(0, currentPosition - 25);
-        requestAnimationFrame(scrollToTop);
-      } else {
-        // Inicia o efeito de sucção quando chegar ao topo
-        setTimeout(() => {
-          setBugEffect(true);
-          setTimeout(() => setBugEffect(false), 1000);
-          setTimeout(() => setBugEffect(true), 2000);
-          setTimeout(() => setBugEffect(false), 2500);
-          setTimeout(() => setBugEffect(true), 3000);
-          setTimeout(() => setBugEffect(false), 3300);
-          setTimeout(() => setBugEffect(true), 3500);
-        }, 1000);
-      }
-    };
-    scrollToTop();
+
+    handleNavigate("about");
+
+    setTimeout(() => {
+      setBugEffect(true);
+    }, 1000);
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
       <BackgroundScene bugEffect={bugEffect} />
-      <DiamondNav activeSection={activeSection} onNavigate={handleNavigate} />
+      <DiamondNav
+        SECTIONS={SECTIONS}
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
+      />
       <motion.div
         className="relative z-10"
         animate={{ y: 0, opacity: 1 }}
