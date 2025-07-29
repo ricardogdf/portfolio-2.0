@@ -40,6 +40,36 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Navegação global por scroll (wheel) mais fluída
+  useEffect(() => {
+    let isThrottled = false;
+    const mainContainer = document.querySelector("main");
+    const handleWheel = (e: WheelEvent) => {
+      // Só navega se o mouse estiver sobre o container principal
+      if (
+        !mainContainer ||
+        !(e.target instanceof Node) ||
+        !mainContainer.contains(e.target)
+      )
+        return;
+      if (isThrottled) return;
+      isThrottled = true;
+      setTimeout(() => {
+        isThrottled = false;
+      }, 400); // throttle menor para fluidez
+      const currentIdx = SECTIONS.findIndex((s) => s.id === activeSection);
+      if (e.deltaY > 0 && currentIdx < SECTIONS.length - 1) {
+        e.preventDefault();
+        handleNavigate(SECTIONS[currentIdx + 1].id);
+      } else if (e.deltaY < 0 && currentIdx > 0) {
+        e.preventDefault();
+        handleNavigate(SECTIONS[currentIdx - 1].id);
+      }
+    };
+    mainContainer?.addEventListener("wheel", handleWheel, { passive: false });
+    return () => mainContainer?.removeEventListener("wheel", handleWheel);
+  }, [activeSection]);
+
   const handleNavigate = (id: string) => {
     const idx = SECTIONS.findIndex((s) => s.id === id);
     const ref = sectionRefs[idx];
