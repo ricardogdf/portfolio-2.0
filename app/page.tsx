@@ -107,16 +107,12 @@ export default function Home() {
             id="final"
             className="snap-start min-h-screen flex justify-center items-center"
           >
-            {!openPortal ? (
-              <button
-                onClick={handleButtonClick}
-                className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
-              >
-                []
-              </button>
-            ) : (
-              "bill"
-            )}
+            <button
+              onClick={handleButtonClick}
+              className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
+            >
+              []
+            </button>
           </section>
         </main>
         <Actions />
