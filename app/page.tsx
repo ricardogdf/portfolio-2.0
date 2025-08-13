@@ -3,16 +3,16 @@
 import AboutMe from "@/components/about-me";
 import Experience from "@/components/experience";
 import Projects from "@/components/projects";
-import Skills from "@/components/skills";
 import BackgroundScene from "@/components/background-scene";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Actions from "@/components/actions";
 import DiamondNav from "@/components/diamond-nav";
+import Me from "@/components/me";
 
 const SECTIONS = [
+  { id: "me", label: "Eu" },
   { id: "about", label: "Sobre" },
-  { id: "skills", label: "Skills" },
   { id: "experience", label: "Experiência" },
   { id: "projects", label: "Projetos" },
   { id: "final", label: "Final" },
@@ -106,17 +106,17 @@ export default function Home() {
         <main className="container mx-auto px-4 snap-y snap-mandatory h-screen overflow-y-scroll scrollbar-hide">
           <section
             ref={sectionRefs[0]}
-            id="about"
+            id="me"
             className="snap-start min-h-screen flex items-center"
           >
-            <AboutMe bugEffect={bugEffect} openPortal={openPortal} />
+            <Me bugEffect={bugEffect} openPortal={openPortal} />
           </section>
           <section
             ref={sectionRefs[1]}
-            id="skills"
+            id="about"
             className="snap-start min-h-screen flex items-center"
           >
-            <Skills />
+            <AboutMe />
           </section>
           <section
             ref={sectionRefs[2]}

@@ -1,85 +1,73 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import "@/styles/glitch.css";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
-export default function AboutMe({
-  bugEffect,
-  openPortal,
-}: {
-  bugEffect?: boolean;
-  openPortal?: boolean;
-}) {
-  const [mounted, setMounted] = useState(false);
-  const [name, setName] = useState("Ricardo");
+export default function AboutMe() {
+  const [selected, setSelected] = useState<number>(0);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (bugEffect) {
-      setName("MadRick");
-    } else {
-      const currentPosition = window.scrollY;
-      if (openPortal && currentPosition === 0) {
-        setTimeout(() => {
-          setName("Ricardo?");
-        }, 100);
-      }
-    }
-  }, [openPortal, bugEffect]);
-
-  if (!mounted) return null;
+  const experiences = [
+    {
+      company: "Prime DB Solutions",
+      logo: "/primedb.png",
+      period: "2023 - Presente",
+      role: "Desenvolvedor Full Stack",
+      description:
+        "Desenvolvimento de aplicações web utilizando React, TypeScript, Node JS e Java. Desenvolvedor solo responsável pelo sistema ITSM da empresa.",
+      achievements: [
+        "Migração de sistema legado para stack atualizada e moderna (React)",
+        "Implementação de integração com API de terceiros",
+        "Desenvolvimento de um design system para padronizar a UI do sistema",
+      ],
+      technologies: [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "JavaScript",
+        "Java",
+        "Oracle",
+      ],
+    },
+    {
+      company: "Madeira Madeira",
+      logo: "/madeira-madeira.jpg",
+      period: "2021 - 2023",
+      role: "Desenvolvedor Frontend",
+      description:
+        "Desenvolvimento componentes e telas utilizando Next.js. Participava do time responsável pela home, página de produto e listagem de produtos.",
+      achievements: [
+        "Desenvolvimento de componentes reutilizáveis para a biblioteca de UI",
+        "Trabalho em equipe com designers para garantir a melhor experiência do usuário",
+        "Trabalho em melhorias de performance e acessibilidade",
+      ],
+      technologies: ["Next.js", "React", "TypeScript", "Git", "GraphQL"],
+    },
+  ];
 
   return (
-    <div className="mx-auto max-w-5xl">
-      <motion.div
-        className="flex flex-col md:flex-row items-center md:items-start gap-8"
+    <div className="flex flex-col items-center mx-auto max-w-6xl">
+      <motion.h2
+        className="mb-8 text-center text-3xl font-bold"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
         style={{ willChange: "transform, opacity" }}
       >
-        {/* Texto */}
-        <motion.div
-          className="w-full text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.3 }}
-          style={{ willChange: "opacity" }}
-        >
-          <h1 className="flex gap-4 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-clip-text mb-12">
-            Hi, i'm
-            <p
-              className={bugEffect ? "hero glitch layers" : ""}
-              data-text={name}
-            >
-              <span>{name}</span>
-            </p>
-          </h1>
-        </motion.div>
-      </motion.div>
+        About Me
+      </motion.h2>
+      <motion.p
+        className="mb-8 text-center text-muted-foreground"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ willChange: "transform, opacity" }}
+      >
+        Web developer interested in design, security, artificial intelligence,
+        and animated websites.
+      </motion.p>
+      <Button>See the magic</Button>
     </div>
   );
-}
-
-// Adicionar animação glitch globalmente
-if (typeof window !== "undefined") {
-  const style = document.createElement("style");
-  style.innerHTML = `
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(-2px, -2px); }
-      60% { transform: translate(2px, 2px); }
-      80% { transform: translate(2px, -2px); }
-      100% { transform: translate(0); }
-    }
-  `;
-  if (!document.getElementById("glitch-style")) {
-    style.id = "glitch-style";
-    document.head.appendChild(style);
-  }
 }
