@@ -14,7 +14,7 @@ export default function Experience() {
       period: "2023 - Presente",
       role: "Desenvolvedor Full Stack",
       description:
-        "Desenvolvimento de aplicações web utilizando React, TypeScript, Node JS e Java. Desenvolvedor solo responsável por todo o sistema.",
+        "Desenvolvimento de aplicações web utilizando React, TypeScript, Node JS e Java. Desenvolvedor solo responsável pelo sistema ITSM da empresa.",
       achievements: [
         "Migração de sistema legado para stack atualizada e moderna (React)",
         "Implementação de integração com API de terceiros",
@@ -25,8 +25,8 @@ export default function Experience() {
         "Node.js",
         "TypeScript",
         "JavaScript",
-        "Express",
-        "Redux",
+        "Java",
+        "Oracle",
       ],
     },
     {
@@ -86,7 +86,7 @@ export default function Experience() {
         </div>
         {/* Detalhes da empresa selecionada à direita */}
         <div className="col-span-2 bg-card border border-primary/10 rounded-lg p-6 flex flex-col justify-center">
-          <h4 className="font-medium text-primary text-lg mb-2">
+          <h4 className="font-medium text-lg mb-2">
             {experiences[selected].role}
           </h4>
           <p className="text-sm text-muted-foreground mb-4">
