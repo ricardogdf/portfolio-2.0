@@ -4,32 +4,12 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import "@/styles/glitch.css";
 
-export default function Me({
-  bugEffect,
-  openPortal,
-}: {
-  bugEffect?: boolean;
-  openPortal?: boolean;
-}) {
+export default function Me({ openPortal }: { openPortal?: boolean }) {
   const [mounted, setMounted] = useState(false);
-  const [name, setName] = useState("Ricardo");
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (bugEffect) {
-      setName("MadRick");
-    } else {
-      const currentPosition = window.scrollY;
-      if (openPortal && currentPosition === 0) {
-        setTimeout(() => {
-          setName("Ricardo?");
-        }, 100);
-      }
-    }
-  }, [openPortal, bugEffect]);
 
   if (!mounted) return null;
 
@@ -53,13 +33,17 @@ export default function Me({
           <h1 className="flex gap-4 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-clip-text mb-4">
             Hi, I'm
             <p
-              className={bugEffect ? "hero glitch layers" : ""}
-              data-text={name}
+              className={openPortal ? "hero glitch layers" : ""}
+              data-text={openPortal ? "Mad Rick" : "Ricardo"}
             >
-              <span>{name}</span>
+              <span>{openPortal ? "Mad Rick" : "Ricardo"}</span>
             </p>
           </h1>
-          <p className="font-bold text-muted-foreground">Software Developer</p>
+          <p className="font-bold text-muted-foreground">
+            {openPortal
+              ? "Achievement collector and FPS player"
+              : "Software Developer"}
+          </p>
         </motion.div>
       </motion.div>
     </div>

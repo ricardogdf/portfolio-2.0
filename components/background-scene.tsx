@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState, useLayoutEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, cubicBezier } from "framer-motion";
 
 // Função para gerar elementos aleatórios de forma consistente
 const generateElements = (seed: number) => {
@@ -22,7 +22,11 @@ const generateElements = (seed: number) => {
   return { stars };
 };
 
-export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
+export default function BackgroundScene({
+  openPortal,
+}: {
+  openPortal: boolean;
+}) {
   const { resolvedTheme } = useTheme();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const elementsRef = useRef<{ stars: any[] } | null>(null);
@@ -63,7 +67,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
       opacity: 1,
       transition: {
         duration: 2.5,
-        ease: [0.4, 0, 0.2, 1],
+        ease: cubicBezier(0.4, 0, 0.2, 1),
       },
     },
     exit: {
@@ -72,7 +76,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
       opacity: 0,
       transition: {
         duration: 2.5,
-        ease: [0.4, 0, 0.2, 1],
+        ease: cubicBezier(0.4, 0, 0.2, 1),
       },
     },
   };
@@ -90,7 +94,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
       opacity: 1,
       transition: {
         duration: 2.5,
-        ease: [0.4, 0, 0.2, 1],
+        ease: cubicBezier(0.4, 0, 0.2, 1),
       },
     },
     exit: {
@@ -99,7 +103,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
       opacity: 0,
       transition: {
         duration: 2.5,
-        ease: [0.4, 0, 0.2, 1],
+        ease: cubicBezier(0.4, 0, 0.2, 1),
       },
     },
   };
@@ -115,23 +119,23 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         initial={false}
         animate={{
           background: isDark
-            ? bugEffect
+            ? openPortal
               ? "black"
               : "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
-            : bugEffect
+            : openPortal
             ? "white"
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
-        transition={{ duration: bugEffect ? 1 : 2.5 }}
+        transition={{ duration: openPortal ? 1 : 2.5 }}
         style={{ willChange: "background" }}
       />
 
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
         {/* Transição do Sol */}
-        {!bugEffect && (
+        {!openPortal && (
           <AnimatePresence>
-            {(!isDark || isChangingToLight) && !bugEffect && (
+            {(!isDark || isChangingToLight) && !openPortal && (
               <motion.div
                 className="sun"
                 variants={sunVariants}
@@ -145,9 +149,9 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         )}
 
         {/* Transição da Lua */}
-        {!bugEffect && (
+        {!openPortal && (
           <AnimatePresence>
-            {(isDark || isChangingToDark) && !bugEffect && (
+            {(isDark || isChangingToDark) && !openPortal && (
               <motion.div
                 className="moon"
                 variants={moonVariants}
@@ -161,9 +165,9 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         )}
 
         {/* Nuvens */}
-        {!bugEffect && (
+        {!openPortal && (
           <AnimatePresence>
-            {(!isDark || isChangingToDark) && !bugEffect && (
+            {(!isDark || isChangingToDark) && !openPortal && (
               <>
                 <motion.div
                   className="cloud cloud-1"
@@ -195,7 +199,7 @@ export default function BackgroundScene({ bugEffect }: { bugEffect: boolean }) {
         )}
 
         {/* Estrelas */}
-        {!bugEffect && (
+        {!openPortal && (
           <AnimatePresence>
             {(isDark || isChangingToLight) && (
               <>

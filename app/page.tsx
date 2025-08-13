@@ -20,7 +20,6 @@ const SECTIONS = [
 
 export default function Home() {
   const [openPortal, setOpenPortal] = useState(false);
-  const [bugEffect, setBugEffect] = useState(false);
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
   const sectionRefs = SECTIONS.map(() => useRef<HTMLElement | null>(null));
 
@@ -81,18 +80,16 @@ export default function Home() {
   };
 
   const handleButtonClick = () => {
-    setOpenPortal(true);
-
-    handleNavigate("about");
+    handleNavigate("me");
 
     setTimeout(() => {
-      setBugEffect(true);
+      setOpenPortal(openPortal ? false : true);
     }, 1000);
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <BackgroundScene bugEffect={bugEffect} />
+      <BackgroundScene openPortal={openPortal} />
       <DiamondNav
         SECTIONS={SECTIONS}
         activeSection={activeSection}
@@ -109,7 +106,7 @@ export default function Home() {
             id="me"
             className="snap-start min-h-screen flex items-center"
           >
-            <Me bugEffect={bugEffect} openPortal={openPortal} />
+            <Me openPortal={openPortal} />
           </section>
           <section
             ref={sectionRefs[1]}
