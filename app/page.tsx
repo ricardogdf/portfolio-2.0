@@ -134,6 +134,14 @@ export default function Home() {
             id="final"
             className="snap-start min-h-screen flex justify-center items-center"
           >
+            <div className="flex flex-col items-center">
+              <h2 className="flex gap-4 font-bold tracking-tight sm:text-3xl md:text-4xl bg-clip-text mb-4">
+                Thank you, that's all.
+              </h2>
+              <p className="font-bold text-muted-foreground">For now.</p>
+            </div>
+          </section>
+          <section className="snap-start min-h-screen flex justify-center items-center">
             <button
               onClick={handleButtonClick}
               className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
