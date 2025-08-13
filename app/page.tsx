@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import Actions from "@/components/actions";
 import DiamondNav from "@/components/diamond-nav";
 import Me from "@/components/me";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const SECTIONS = [
   { id: "me", label: "Eu" },
@@ -16,12 +18,17 @@ const SECTIONS = [
   { id: "experience", label: "Experiência" },
   { id: "projects", label: "Projetos" },
   { id: "final", label: "Final" },
+  { id: "eclipse", label: "Eclipse" },
 ];
 
 export default function Home() {
-  const [openPortal, setOpenPortal] = useState(false);
-  const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+  const { theme } = useTheme();
+
   const sectionRefs = SECTIONS.map(() => useRef<HTMLElement | null>(null));
+
+  const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+  const [openPortal, setOpenPortal] = useState(false);
+  const [eclipe, setEclipse] = useState(false);
 
   // Scroll snapping e detecção de seção visível
   useEffect(() => {
@@ -83,7 +90,11 @@ export default function Home() {
     handleNavigate("me");
 
     setTimeout(() => {
-      setOpenPortal(openPortal ? false : true);
+      setEclipse(openPortal ? false : true);
+
+      setTimeout(() => {
+        setOpenPortal(openPortal ? false : true);
+      }, 1000);
     }, 1000);
   };
 
@@ -141,14 +152,26 @@ export default function Home() {
               <p className="font-bold text-muted-foreground">For now.</p>
             </div>
           </section>
-          <section className="snap-start min-h-screen flex justify-center items-center">
-            <button
-              onClick={handleButtonClick}
-              className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
+          {theme === "light" && (
+            <section
+              ref={sectionRefs[5]}
+              id="eclipse"
+              className="snap-start min-h-screen flex justify-center items-center"
             >
-              []
-            </button>
-          </section>
+              <button
+                onClick={handleButtonClick}
+                className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
+              >
+                <Image
+                  width={50}
+                  height={50}
+                  src={"/behelit.png"}
+                  alt={"Behelit"}
+                  className="object-cover"
+                />
+              </button>
+            </section>
+          )}
         </main>
         <Actions />
       </motion.div>
