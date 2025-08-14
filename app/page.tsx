@@ -21,7 +21,7 @@ const SECTIONS = [
 ];
 
 export default function Home() {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const sectionRefs = SECTIONS.map(() => useRef<HTMLElement | null>(null));
 
@@ -76,6 +76,16 @@ export default function Home() {
     mainContainer?.addEventListener("wheel", handleWheel, { passive: false });
     return () => mainContainer?.removeEventListener("wheel", handleWheel);
   }, [activeSection]);
+
+  // Aplicar classe portal-open quando o portal estiver aberto
+  useEffect(() => {
+    const htmlElement = document.documentElement;
+    if (openPortal) {
+      htmlElement.classList.add("portal-open");
+    } else {
+      htmlElement.classList.remove("portal-open");
+    }
+  }, [openPortal]);
 
   const handleNavigate = (id: string) => {
     const idx = SECTIONS.findIndex((s) => s.id === id);
@@ -185,7 +195,7 @@ export default function Home() {
             </div>
           </section>
         </main>
-        <Actions disabled={isThemeDisabled} />
+        <Actions disabled={isThemeDisabled} openPortal={openPortal} />
       </motion.div>
     </div>
   );
