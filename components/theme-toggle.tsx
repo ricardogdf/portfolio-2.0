@@ -10,7 +10,10 @@ interface ThemeToggleProps {
   openPortal?: boolean;
 }
 
-export function ThemeToggle({ disabled = false, openPortal = false }: ThemeToggleProps) {
+export function ThemeToggle({
+  disabled = false,
+  openPortal = false,
+}: ThemeToggleProps) {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
@@ -46,15 +49,15 @@ export function ThemeToggle({ disabled = false, openPortal = false }: ThemeToggl
       size="icon"
       onClick={toggleTheme}
       className={`rounded-full transition-colors duration-500 ${
-        openPortal 
-          ? "hover:bg-red-800/30 hover:text-red-300 text-red-200" 
+        openPortal
+          ? "hover:bg-red-800/30 hover:text-red-300 text-red-200"
           : "hover:bg-primary/10 hover:text-primary"
       }`}
       aria-label="Alternar tema"
       disabled={isChanging || disabled}
     >
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <Sun className="h-5 w-5 rotate-0 scale-0 transition-all dark:scale-100" />
+      <Moon className="absolute h-5 w-5 scale-100 transition-all dark:scale-0" />
     </Button>
   );
 }

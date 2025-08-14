@@ -62,12 +62,12 @@ export default function BackgroundScene({
   const eclipseVariants = {
     visible: {
       x: 0,
-      y: [0, 610],
+      y: [0, 640],
       opacity: 1,
       scale: 1,
       transition: {
         duration: 8,
-        ease: cubicBezier(0.2, 0, 0.1, 1),
+        ease: cubicBezier(0.1, 0, 0.1, 1),
       },
     },
   };
@@ -103,7 +103,7 @@ export default function BackgroundScene({
     animated: {
       x: [0, "-400%", "-770%", "-770%"],
       y: [0, "-400%", "-400%", "330%"],
-      scale: [1, 1, 3, 3],
+      scale: [1, 1, 3.2, 3.2],
       opacity: [1, 1, 0, 1],
       transition: {
         duration: 7.5,

@@ -111,7 +111,7 @@ export default function Home() {
         setTimeout(() => {
           setOpenPortal(true);
         }, 7200);
-      }, 8000);
+      }, 8500);
     }, 1000);
   };
 
