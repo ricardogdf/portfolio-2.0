@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import "@/styles/glitch.css";
 
 export default function Me({ openPortal }: { openPortal?: boolean }) {
   const [mounted, setMounted] = useState(false);
@@ -32,10 +31,7 @@ export default function Me({ openPortal }: { openPortal?: boolean }) {
         >
           <h1 className="flex gap-4 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-clip-text mb-4">
             Hi, I'm
-            <p
-              className={openPortal ? "hero glitch layers" : ""}
-              data-text={openPortal ? "Mad Rick" : "Ricardo"}
-            >
+            <p data-text={openPortal ? "Mad Rick" : "Ricardo"}>
               <span>{openPortal ? "Mad Rick" : "Ricardo"}</span>
             </p>
           </h1>
@@ -48,23 +44,4 @@ export default function Me({ openPortal }: { openPortal?: boolean }) {
       </motion.div>
     </div>
   );
-}
-
-// Adicionar animação glitch globalmente
-if (typeof window !== "undefined") {
-  const style = document.createElement("style");
-  style.innerHTML = `
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(-2px, -2px); }
-      60% { transform: translate(2px, 2px); }
-      80% { transform: translate(2px, -2px); }
-      100% { transform: translate(0); }
-    }
-  `;
-  if (!document.getElementById("glitch-style")) {
-    style.id = "glitch-style";
-    document.head.appendChild(style);
-  }
 }

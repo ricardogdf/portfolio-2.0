@@ -18,7 +18,6 @@ const SECTIONS = [
   { id: "experience", label: "Experiência" },
   { id: "projects", label: "Projetos" },
   { id: "final", label: "Final" },
-  { id: "eclipse", label: "Eclipse" },
 ];
 
 export default function Home() {
@@ -28,7 +27,9 @@ export default function Home() {
 
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
   const [openPortal, setOpenPortal] = useState(false);
-  const [eclipe, setEclipse] = useState(false);
+  const [isThemeDisabled, setIsThemeDisabled] = useState(false);
+  const [sunAnimation, setSunAnimation] = useState(false);
+  const [eclipseAnimation, setEclipseAnimation] = useState(false);
 
   // Scroll snapping e detecção de seção visível
   useEffect(() => {
@@ -87,20 +88,30 @@ export default function Home() {
   };
 
   const handleButtonClick = () => {
+    setIsThemeDisabled(true);
+
     handleNavigate("me");
 
     setTimeout(() => {
-      setEclipse(openPortal ? false : true);
+      setSunAnimation(true);
 
       setTimeout(() => {
-        setOpenPortal(openPortal ? false : true);
-      }, 1000);
+        setEclipseAnimation(true);
+
+        setTimeout(() => {
+          setOpenPortal(true);
+        }, 7200);
+      }, 8000);
     }, 1000);
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <BackgroundScene openPortal={openPortal} />
+      <BackgroundScene
+        openPortal={openPortal}
+        sunAnimation={sunAnimation}
+        eclipseAnimation={eclipseAnimation}
+      />
       <DiamondNav
         SECTIONS={SECTIONS}
         activeSection={activeSection}
@@ -147,33 +158,34 @@ export default function Home() {
           >
             <div className="flex flex-col items-center">
               <h2 className="flex gap-4 font-bold tracking-tight sm:text-3xl md:text-4xl bg-clip-text mb-4">
-                Thank you, that's all.
+                {openPortal
+                  ? "Thank you, that's the end."
+                  : "Thank you, that's all."}
               </h2>
-              <p className="font-bold text-muted-foreground">For now.</p>
+
+              {!openPortal && theme === "light" ? (
+                <button
+                  id="behelit"
+                  onClick={handleButtonClick}
+                  className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
+                >
+                  <Image
+                    width={30}
+                    height={30}
+                    src={"/behelit.png"}
+                    alt={"Behelit"}
+                    className="object-cover"
+                  />
+                </button>
+              ) : (
+                <p className="font-bold text-muted-foreground">
+                  {openPortal ? "For Ever" : "For now."}
+                </p>
+              )}
             </div>
           </section>
-          {theme === "light" && (
-            <section
-              ref={sectionRefs[5]}
-              id="eclipse"
-              className="snap-start min-h-screen flex justify-center items-center"
-            >
-              <button
-                onClick={handleButtonClick}
-                className="text-2xl font-mono hover:scale-110 transition-transform duration-300"
-              >
-                <Image
-                  width={50}
-                  height={50}
-                  src={"/behelit.png"}
-                  alt={"Behelit"}
-                  className="object-cover"
-                />
-              </button>
-            </section>
-          )}
         </main>
-        <Actions />
+        <Actions disabled={isThemeDisabled} />
       </motion.div>
     </div>
   );

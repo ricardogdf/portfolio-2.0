@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  disabled?: boolean;
+}
+
+export function ThemeToggle({ disabled = false }: ThemeToggleProps) {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
@@ -16,7 +20,7 @@ export function ThemeToggle() {
   }, []);
 
   const toggleTheme = () => {
-    if (isChanging) return; // Previne múltiplos cliques durante a transição
+    if (isChanging || disabled) return; // Previne múltiplos cliques durante a transição
 
     setIsChanging(true);
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -42,7 +46,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       className="rounded-full hover:bg-primary/10 hover:text-primary"
       aria-label="Alternar tema"
-      disabled={isChanging}
+      disabled={isChanging || disabled}
     >
       <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

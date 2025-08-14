@@ -24,8 +24,12 @@ const generateElements = (seed: number) => {
 
 export default function BackgroundScene({
   openPortal,
+  sunAnimation = false,
+  eclipseAnimation = false,
 }: {
   openPortal: boolean;
+  sunAnimation?: boolean;
+  eclipseAnimation?: boolean;
 }) {
   const { resolvedTheme } = useTheme();
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -55,16 +59,32 @@ export default function BackgroundScene({
   const isChangingToLight = isTransitioning && resolvedTheme === "light";
 
   // Variantes de animação para o sol
+  const eclipseVariants = {
+    visible: {
+      x: 0,
+      y: [0, 610],
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 8,
+        ease: cubicBezier(0.2, 0, 0.1, 1),
+      },
+    },
+  };
+
+  // Variantes de animação para o sol
   const sunVariants = {
     hidden: {
       x: "400%",
       y: "400%",
       opacity: 0,
+      scale: 1,
     },
     visible: {
       x: 0,
       y: 0,
       opacity: 1,
+      scale: 1,
       transition: {
         duration: 2.5,
         ease: cubicBezier(0.4, 0, 0.2, 1),
@@ -74,9 +94,21 @@ export default function BackgroundScene({
       x: "-400%",
       y: "-400%",
       opacity: 0,
+      scale: 1,
       transition: {
         duration: 2.5,
         ease: cubicBezier(0.4, 0, 0.2, 1),
+      },
+    },
+    animated: {
+      x: [0, "-400%", "-770%", "-770%"],
+      y: [0, "-400%", "-400%", "330%"],
+      scale: [1, 1, 3, 3],
+      opacity: [1, 1, 0, 1],
+      transition: {
+        duration: 7.5,
+        ease: cubicBezier(0.4, 0, 0.2, 1),
+        times: [0, 0.3, 0.4, 1],
       },
     },
   };
@@ -119,11 +151,9 @@ export default function BackgroundScene({
         initial={false}
         animate={{
           background: isDark
-            ? openPortal
-              ? "black"
-              : "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
+            ? "linear-gradient(to bottom, #000000 0%, #0c1445 100%)"
             : openPortal
-            ? "white"
+            ? "#880808"
             : "linear-gradient(to bottom, #87ceeb 0%, #e0f7ff 100%)",
         }}
         transition={{ duration: openPortal ? 1 : 2.5 }}
@@ -132,37 +162,50 @@ export default function BackgroundScene({
 
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
+        {/* Eclipse */}
+        <AnimatePresence>
+          {eclipseAnimation && (
+            <motion.div
+              className="eclipse"
+              variants={eclipseVariants}
+              animate="visible"
+              style={{
+                willChange: "transform, opacity",
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         {/* Transição do Sol */}
-        {!openPortal && (
-          <AnimatePresence>
-            {(!isDark || isChangingToLight) && !openPortal && (
-              <motion.div
-                className="sun"
-                variants={sunVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                style={{ willChange: "transform, opacity" }}
-              />
-            )}
-          </AnimatePresence>
-        )}
+        <AnimatePresence>
+          {(!isDark || isChangingToLight) && (
+            <motion.div
+              className="sun"
+              variants={sunVariants}
+              initial="hidden"
+              animate={sunAnimation ? "animated" : "visible"}
+              exit="exit"
+              style={{
+                willChange: "transform, opacity",
+                boxShadow: openPortal ? "0 0 10px white" : "0 0 70px #ffdd00",
+              }}
+            />
+          )}
+        </AnimatePresence>
 
         {/* Transição da Lua */}
-        {!openPortal && (
-          <AnimatePresence>
-            {(isDark || isChangingToDark) && !openPortal && (
-              <motion.div
-                className="moon"
-                variants={moonVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                style={{ willChange: "transform, opacity" }}
-              />
-            )}
-          </AnimatePresence>
-        )}
+        <AnimatePresence>
+          {(isDark || isChangingToDark) && (
+            <motion.div
+              className="moon"
+              variants={moonVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              style={{ willChange: "transform, opacity" }}
+            />
+          )}
+        </AnimatePresence>
 
         {/* Nuvens */}
         {!openPortal && (
@@ -199,40 +242,38 @@ export default function BackgroundScene({
         )}
 
         {/* Estrelas */}
-        {!openPortal && (
-          <AnimatePresence>
-            {(isDark || isChangingToLight) && (
-              <>
-                {elementsRef.current.stars.map((star) => (
-                  <motion.div
-                    key={star.id}
-                    className="star"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 0.8,
-                      scale: 1,
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 2.0 }}
-                    style={{
-                      position: "absolute",
-                      width: `${star.size}px`,
-                      height: `${star.size}px`,
-                      top: `${star.top}%`,
-                      left: `${star.left}%`,
-                      animationDelay: `${star.delay}s`,
-                      boxShadow: `0 0 ${star.size + 1}px white`,
-                      borderRadius: "50%",
-                      background: "white",
-                      opacity: Math.max(0, 2.5),
-                      willChange: "transform, opacity",
-                    }}
-                  />
-                ))}
-              </>
-            )}
-          </AnimatePresence>
-        )}
+        <AnimatePresence>
+          {(isDark || isChangingToLight) && (
+            <>
+              {elementsRef.current.stars.map((star) => (
+                <motion.div
+                  key={star.id}
+                  className="star"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 0.8,
+                    scale: 1,
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 2.0 }}
+                  style={{
+                    position: "absolute",
+                    width: `${star.size}px`,
+                    height: `${star.size}px`,
+                    top: `${star.top}%`,
+                    left: `${star.left}%`,
+                    animationDelay: `${star.delay}s`,
+                    boxShadow: `0 0 ${star.size + 1}px white`,
+                    borderRadius: "50%",
+                    background: "white",
+                    opacity: Math.max(0, 2.5),
+                    willChange: "transform, opacity",
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
