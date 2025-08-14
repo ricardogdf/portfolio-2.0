@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 
 interface ThemeToggleProps {
   disabled?: boolean;
+  openPortal?: boolean;
 }
 
-export function ThemeToggle({ disabled = false }: ThemeToggleProps) {
+export function ThemeToggle({ disabled = false, openPortal = false }: ThemeToggleProps) {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
@@ -44,7 +45,11 @@ export function ThemeToggle({ disabled = false }: ThemeToggleProps) {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full hover:bg-primary/10 hover:text-primary"
+      className={`rounded-full transition-colors duration-500 ${
+        openPortal 
+          ? "hover:bg-red-800/30 hover:text-red-300 text-red-200" 
+          : "hover:bg-primary/10 hover:text-primary"
+      }`}
       aria-label="Alternar tema"
       disabled={isChanging || disabled}
     >

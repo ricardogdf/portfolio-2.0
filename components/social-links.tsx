@@ -2,13 +2,21 @@ import Link from "next/link";
 import { Github, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function SocialLinks() {
+interface SocialLinksProps {
+  openPortal?: boolean;
+}
+
+export default function SocialLinks({ openPortal = false }: SocialLinksProps) {
   return (
     <div className="flex items-center gap-2">
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-primary/10 hover:text-primary"
+        className={`rounded-full transition-colors duration-500 ${
+          openPortal 
+            ? "hover:bg-red-800/30 hover:text-red-300 text-red-200" 
+            : "hover:bg-primary/10 hover:text-primary"
+        }`}
         asChild
       >
         <Link
@@ -22,7 +30,11 @@ export default function SocialLinks() {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-primary/10 hover:text-primary"
+        className={`rounded-full transition-colors duration-500 ${
+          openPortal 
+            ? "hover:bg-red-800/30 hover:text-red-300 text-red-200" 
+            : "hover:bg-primary/10 hover:text-primary"
+        }`}
         asChild
       >
         <Link
@@ -36,7 +48,11 @@ export default function SocialLinks() {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-primary/10 hover:text-primary"
+        className={`rounded-full transition-colors duration-500 ${
+          openPortal 
+            ? "hover:bg-red-800/30 hover:text-red-300 text-red-200" 
+            : "hover:bg-primary/10 hover:text-primary"
+        }`}
         asChild
       >
         <Link
