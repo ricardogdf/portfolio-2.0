@@ -1,72 +1,73 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
 export default function AboutMe() {
-  const [mounted, setMounted] = useState(false);
+  const [selected, setSelected] = useState<number>(0);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const experiences = [
+    {
+      company: "Prime DB Solutions",
+      logo: "/primedb.png",
+      period: "2023 - Presente",
+      role: "Desenvolvedor Full Stack",
+      description:
+        "Desenvolvimento de aplicações web utilizando React, TypeScript, Node JS e Java. Desenvolvedor solo responsável pelo sistema ITSM da empresa.",
+      achievements: [
+        "Migração de sistema legado para stack atualizada e moderna (React)",
+        "Implementação de integração com API de terceiros",
+        "Desenvolvimento de um design system para padronizar a UI do sistema",
+      ],
+      technologies: [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "JavaScript",
+        "Java",
+        "Oracle",
+      ],
+    },
+    {
+      company: "Madeira Madeira",
+      logo: "/madeira-madeira.jpg",
+      period: "2021 - 2023",
+      role: "Desenvolvedor Frontend",
+      description:
+        "Desenvolvimento componentes e telas utilizando Next.js. Participava do time responsável pela home, página de produto e listagem de produtos.",
+      achievements: [
+        "Desenvolvimento de componentes reutilizáveis para a biblioteca de UI",
+        "Trabalho em equipe com designers para garantir a melhor experiência do usuário",
+        "Trabalho em melhorias de performance e acessibilidade",
+      ],
+      technologies: ["Next.js", "React", "TypeScript", "Git", "GraphQL"],
+    },
+  ];
 
   return (
-    <section className="py-12">
-      <div className="mx-auto max-w-5xl px-4">
-        <motion.div
-          className="flex flex-col md:flex-row items-center md:items-start gap-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ willChange: 'transform, opacity' }}
-        >
-          {/* Foto */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
-            className="w-full md:w-1/3 flex justify-center"
-            style={{ willChange: 'transform, opacity' }}
-          >
-            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-primary/20">
-              <Image
-                src="/profile.jpg"
-                alt="Sua foto"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </motion.div>
-
-          {/* Texto */}
-          <motion.div
-            className="w-full md:w-2/3 text-center md:text-left"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
-            style={{ willChange: 'opacity' }}
-          >
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400 animate-gradient-x mb-6">
-              Olá, eu sou o Ricardo
-            </h1>
-            <div className="text-lg text-muted-foreground">
-              <p className="mb-4">
-                Sou um desenvolvedor apaixonado por criar soluções inovadoras e
-                experiências digitais incríveis.
-              </p>
-              <p>
-                Com experiência em desenvolvimento web, estou sempre em busca de
-                novos desafios e oportunidades para expandir meus conhecimentos
-                e habilidades.
-              </p>
-            </div>
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
+    <div className="flex flex-col items-center mx-auto max-w-6xl">
+      <motion.h2
+        className="mb-8 text-center text-3xl font-bold"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ willChange: "transform, opacity" }}
+      >
+        About Me
+      </motion.h2>
+      <motion.p
+        className="mb-8 text-center text-muted-foreground"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ willChange: "transform, opacity" }}
+      >
+        Web developer interested in design, security, artificial intelligence,
+        and animated websites.
+      </motion.p>
+      <Button>See the magic</Button>
+    </div>
   );
 }
