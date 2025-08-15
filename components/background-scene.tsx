@@ -75,8 +75,7 @@ export default function BackgroundScene({
       y: [0, "calc(50vh + 180px)"],
       opacity: 1,
       scale: 1,
-      "--eclipse-progress": [0, 0, 1] as unknown as number,
-      "--eclipse-blur": ["0%", "0%", "10%"] as unknown as number,
+      background: ["#f5f3ce", "#f5f3ce", "#000000"],
       transition: {
         duration: 12.5,
         ease: cubicBezier(0.1, 0, 0.1, 1),
@@ -192,7 +191,7 @@ export default function BackgroundScene({
               background: [
                 "rgba(0,0,0,0)",
                 "rgba(0,0,0,0)",
-                "rgba(0,0,0,0.85)",
+                "rgba(0,0,0,0.95)",
               ],
             }}
             exit={{ background: "rgba(0,0,0,0)" }}
@@ -217,8 +216,7 @@ export default function BackgroundScene({
               variants={eclipseVariants}
               animate="moon"
               style={{
-                willChange: "transform, opacity",
-                ["--eclipse-progress" as any]: 0,
+                willChange: "transform, opacity, background",
               }}
             />
           )}

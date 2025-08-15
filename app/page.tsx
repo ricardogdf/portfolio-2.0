@@ -110,7 +110,7 @@ export default function Home() {
 
         setTimeout(() => {
           setOpenPortal(true);
-        }, 11800);
+        }, 12000);
       }, 10000);
     }, 1000);
   };

@@ -27,10 +27,6 @@
 
     --primary-rgb: 31, 74, 135;
     --accent-rgb: 31, 74, 135;
-    --eclipse-progress: 0;
-    --eclipse-center-y: 50%;
-
-    --eclipse-blur: 0%;
   }
 
   .dark {
@@ -268,14 +264,7 @@
   right: calc(50vw - 160px);
   width: 320px;
   height: 320px;
-  /* Gradiente linear que sobe de baixo para cima com suavização na borda */
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 1) calc(0% + 100% * var(--eclipse-progress)),
-      rgba(0, 0, 0, 0) calc(0% + 100% * var(--eclipse-progress) + var(--eclipse-blur))
-    ),
-    #f5f3ce;
+  background: #f5f3ce;
   border-radius: 50%;
   z-index: 4;
 }
