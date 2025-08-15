@@ -34,6 +34,7 @@ export default function BackgroundScene({
   const { resolvedTheme } = useTheme();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const elementsRef = useRef<{ stars: any[] } | null>(null);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   // Gera elementos apenas uma vez no cliente
   useLayoutEffect(() => {
@@ -54,6 +55,15 @@ export default function BackgroundScene({
     return () => clearTimeout(timer);
   }, [resolvedTheme]);
 
+  // Controla a exibição do overlay e garante desmontagem ao fim
+  useEffect(() => {
+    if (eclipseAnimation) {
+      setShowOverlay(true);
+    } else {
+      setShowOverlay(false);
+    }
+  }, [eclipseAnimation]);
+
   const isDark = resolvedTheme === "dark";
   const isChangingToDark = isTransitioning && resolvedTheme === "dark";
   const isChangingToLight = isTransitioning && resolvedTheme === "light";
@@ -65,7 +75,6 @@ export default function BackgroundScene({
       y: [0, "calc(50vh + 180px)"],
       opacity: 1,
       scale: 1,
-      // A lua começa clara, espera um pouco, e escurece até 100% sem voltar
       "--eclipse-progress": [0, 0, 1] as unknown as number,
       "--eclipse-blur": ["0%", "0%", "10%"] as unknown as number,
       transition: {
@@ -175,7 +184,7 @@ export default function BackgroundScene({
 
       {/* Overlay de escurecimento durante o eclipse */}
       <AnimatePresence>
-        {eclipseAnimation && (
+        {showOverlay && (
           <motion.div
             className="eclipse-overlay"
             initial={{ background: "rgba(0,0,0,0)" }}
@@ -186,11 +195,13 @@ export default function BackgroundScene({
                 "rgba(0,0,0,0.85)",
               ],
             }}
+            exit={{ background: "rgba(0,0,0,0)" }}
             transition={{
               duration: 12.5,
               ease: cubicBezier(0.1, 0, 0.1, 1),
-              times: [0, 0.4, 0.7, 1],
+              times: [0, 0.2, 1],
             }}
+            onAnimationComplete={() => setShowOverlay(false)}
             style={{ willChange: "background" }}
           />
         )}
