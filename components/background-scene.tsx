@@ -65,9 +65,13 @@ export default function BackgroundScene({
       y: [0, "calc(50vh + 180px)"],
       opacity: 1,
       scale: 1,
+      // A lua começa clara, espera um pouco, e escurece até 100% sem voltar
+      "--eclipse-progress": [0, 0, 1] as unknown as number,
+      "--eclipse-blur": ["0%", "0%", "10%"] as unknown as number,
       transition: {
         duration: 12.5,
         ease: cubicBezier(0.1, 0, 0.1, 1),
+        times: [0, 0.22, 1],
       },
     },
     sun: {
@@ -169,6 +173,29 @@ export default function BackgroundScene({
         style={{ willChange: "background" }}
       />
 
+      {/* Overlay de escurecimento durante o eclipse */}
+      <AnimatePresence>
+        {eclipseAnimation && (
+          <motion.div
+            className="eclipse-overlay"
+            initial={{ background: "rgba(0,0,0,0)" }}
+            animate={{
+              background: [
+                "rgba(0,0,0,0)",
+                "rgba(0,0,0,0)",
+                "rgba(0,0,0,0.85)",
+              ],
+            }}
+            transition={{
+              duration: 12.5,
+              ease: cubicBezier(0.1, 0, 0.1, 1),
+              times: [0, 0.4, 0.7, 1],
+            }}
+            style={{ willChange: "background" }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
         {/* Lua Eclipse */}
@@ -180,6 +207,7 @@ export default function BackgroundScene({
               animate="moon"
               style={{
                 willChange: "transform, opacity",
+                ["--eclipse-progress" as any]: 0,
               }}
             />
           )}
