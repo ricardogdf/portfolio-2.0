@@ -258,6 +258,28 @@
   right: -14px;
 }
 
+.moon-eclipse {
+  position: absolute;
+  top: -340px;
+  right: calc(50vw - 160px);
+  width: 320px;
+  height: 320px;
+  background: #f5f3ce;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.sun-eclipse {
+  position: absolute;
+  top: -380px;
+  right: calc(50vw - 160px);
+  width: 320px;
+  height: 320px;
+  background: #ffdd00;
+  border-radius: 50%;
+  z-index: 1;
+}
+
 .sun,
 .moon {
   position: absolute;
@@ -266,22 +288,12 @@
   transform: translateX(-50%);
 }
 
-.eclipse {
-  position: absolute;
-  top: -340px;
-  right: calc(50vw - 160px);
-  width: 320px;
-  height: 320px;
-  background: #000;
-  border-radius: 50%;
-  z-index: 2;
-}
-
 .sun {
   width: 100px;
   height: 100px;
   background: #ffdd00;
   border-radius: 50%;
+  box-shadow: "0 0 70px #ffdd00";
   z-index: 1;
 }
 

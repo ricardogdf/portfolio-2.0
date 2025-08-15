@@ -60,14 +60,25 @@ export default function BackgroundScene({
 
   // Variantes de animação para o sol
   const eclipseVariants = {
-    visible: {
+    moon: {
       x: 0,
-      y: [0, 640],
+      y: [0, "calc(50vh + 180px)"],
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 8,
+        duration: 12.5,
         ease: cubicBezier(0.1, 0, 0.1, 1),
+      },
+    },
+    sun: {
+      x: 0,
+      y: [0, "calc(50vh + 220px)"],
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 10,
+        ease: [0, 0.3, 0.4, 1],
+        times: [0.25, 1],
       },
     },
   };
@@ -100,15 +111,13 @@ export default function BackgroundScene({
         ease: cubicBezier(0.4, 0, 0.2, 1),
       },
     },
-    animated: {
-      x: [0, "-400%", "-770%", "-770%"],
-      y: [0, "-400%", "-400%", "330%"],
-      scale: [1, 1, 3.2, 3.2],
-      opacity: [1, 1, 0, 1],
+    eclipse: {
+      x: [0, "-400%"],
+      y: [0, "-400%"],
+      opacity: [1, 0],
       transition: {
-        duration: 7.5,
+        duration: 2.5,
         ease: cubicBezier(0.4, 0, 0.2, 1),
-        times: [0, 0.3, 0.4, 1],
       },
     },
   };
@@ -162,15 +171,30 @@ export default function BackgroundScene({
 
       {/* Container para o sol e a lua */}
       <div className="relative w-full h-full">
-        {/* Eclipse */}
+        {/* Lua Eclipse */}
         <AnimatePresence>
           {eclipseAnimation && (
             <motion.div
-              className="eclipse"
+              className="moon-eclipse"
               variants={eclipseVariants}
-              animate="visible"
+              animate="moon"
               style={{
                 willChange: "transform, opacity",
+              }}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Sol Eclipse */}
+        <AnimatePresence>
+          {sunAnimation && (
+            <motion.div
+              className="sun-eclipse"
+              variants={eclipseVariants}
+              animate="sun"
+              style={{
+                willChange: "transform, opacity",
+                boxShadow: openPortal ? "0 0 10px white" : "0 0 70px #ffdd00",
               }}
             />
           )}
@@ -183,11 +207,10 @@ export default function BackgroundScene({
               className="sun"
               variants={sunVariants}
               initial="hidden"
-              animate={sunAnimation ? "animated" : "visible"}
+              animate={sunAnimation ? "eclipse" : "visible"}
               exit="exit"
               style={{
                 willChange: "transform, opacity",
-                boxShadow: openPortal ? "0 0 10px white" : "0 0 70px #ffdd00",
               }}
             />
           )}
