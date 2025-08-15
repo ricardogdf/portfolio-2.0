@@ -93,14 +93,6 @@ export default function BackgroundScene({
         times: [0.3, 1],
       },
     },
-    billiard: {
-      boxShadow: ["0 0 70px #ffdd00", "0 0 10px white"],
-      transition: {
-        duration: 4,
-        ease: [0, 0.3, 0.4, 1],
-        times: [0.3, 1],
-      },
-    },
   };
 
   // Variantes de animação para o sol
@@ -236,10 +228,10 @@ export default function BackgroundScene({
             <motion.div
               className="sun-eclipse"
               variants={eclipseVariants}
-              animate={openPortal ? "billiard" : "sun"}
+              animate="sun"
               style={{
-                willChange: "transform, opacity, boxShadow",
-                boxShadow: "0 0 70px #ffdd00",
+                willChange: "transform, opacity",
+                boxShadow: openPortal ? "0 0 10px white" : "0 0 70px #ffdd00",
               }}
             />
           )}
