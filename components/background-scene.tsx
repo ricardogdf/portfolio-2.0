@@ -88,9 +88,17 @@ export default function BackgroundScene({
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 10,
+        duration: 7.5,
         ease: [0, 0.3, 0.4, 1],
-        times: [0.25, 1],
+        times: [0.3, 1],
+      },
+    },
+    billiard: {
+      boxShadow: ["0 0 70px #ffdd00", "0 0 10px white"],
+      transition: {
+        duration: 4,
+        ease: [0, 0.3, 0.4, 1],
+        times: [0.3, 1],
       },
     },
   };
@@ -228,10 +236,10 @@ export default function BackgroundScene({
             <motion.div
               className="sun-eclipse"
               variants={eclipseVariants}
-              animate="sun"
+              animate={openPortal ? "billiard" : "sun"}
               style={{
-                willChange: "transform, opacity",
-                boxShadow: openPortal ? "0 0 10px white" : "0 0 70px #ffdd00",
+                willChange: "transform, opacity, boxShadow",
+                boxShadow: "0 0 70px #ffdd00",
               }}
             />
           )}
