@@ -12,13 +12,13 @@ export default function Experience() {
       company: "Prime DB Solutions",
       logo: "/primedb.png",
       period: "2023 - Presente",
-      role: "Desenvolvedor Full Stack",
+      role: "Full Stack Developer",
       description:
-        "Desenvolvimento de aplicações web utilizando React, TypeScript, Node JS e Java. Desenvolvedor solo responsável pelo sistema ITSM da empresa.",
+        "Experienced in building and maintaining web applications using React, TypeScript, Node.js, and Java. Sole developer responsible for the company’s ITSM system, overseeing the entire development lifecycle.",
       achievements: [
-        "Migração de sistema legado para stack atualizada e moderna (React)",
-        "Implementação de integração com API de terceiros",
-        "Desenvolvimento de um design system para padronizar a UI do sistema",
+        "Led the migration of a legacy system to a modern, scalable stack with React.",
+        "Designed and implemented third-party API integrations to extend system functionality.",
+        "Developed a custom design system to standardize and enhance the UI/UX across the platform.",
       ],
       technologies: [
         "React",
@@ -35,11 +35,11 @@ export default function Experience() {
       period: "2021 - 2023",
       role: "Desenvolvedor Frontend",
       description:
-        "Desenvolvimento componentes e telas utilizando Next.js. Participava do time responsável pela home, página de produto e listagem de produtos.",
+        "Focused on building components and pages using Next.js. Contributed as part of the team responsible for the homepage, product page, and product listing.",
       achievements: [
-        "Desenvolvimento de componentes reutilizáveis para a biblioteca de UI",
-        "Trabalho em equipe com designers para garantir a melhor experiência do usuário",
-        "Trabalho em melhorias de performance e acessibilidade",
+        "Developed reusable components for the company’s UI library.",
+        "Collaborated closely with designers to ensure an optimal user experience.",
+        "Contributed to performance and accessibility improvements across key pages.",
       ],
       technologies: ["Next.js", "React", "TypeScript", "Git", "GraphQL"],
     },
@@ -94,7 +94,7 @@ export default function Experience() {
           </p>
           <div className="grid gap-4">
             <div>
-              <h5 className="font-medium mb-2">Realizações:</h5>
+              <h5 className="font-medium mb-2">Key Achievements:</h5>
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {experiences[selected].achievements.map((achievement, i) => (
                   <li key={i}>{achievement}</li>
@@ -102,7 +102,7 @@ export default function Experience() {
               </ul>
             </div>
             <div>
-              <h5 className="font-medium mb-2">Tecnologias:</h5>
+              <h5 className="font-medium mb-2">Skills:</h5>
               <div className="flex flex-wrap gap-2">
                 {experiences[selected].technologies.map((tech, i) => (
                   <span key={i} className="skill-badge text-xs py-1">
