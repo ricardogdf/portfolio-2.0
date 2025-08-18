@@ -18,7 +18,7 @@ export default function Projects() {
   const projects = [
     {
       title: "Yuli UI",
-      description: "Design system com opções de animações.",
+      description: "Design system with animation options.",
       image: "/placeholder.svg?height=200&width=400",
       tags: ["React JS", "Motion", "Tailwind CSS"],
       demoUrl: "#",
@@ -26,7 +26,7 @@ export default function Projects() {
     },
     {
       title: "Go themes",
-      description: "Marketplace de templates visuais para sites.",
+      description: "Visual templates marketplace for websites",
       image: "/placeholder.svg?height=200&width=400",
       tags: ["Next JS", "Tailwind CSS", "Shadcn UI"],
       demoUrl: "#",
@@ -34,7 +34,7 @@ export default function Projects() {
     },
     {
       title: "Codefier",
-      description: "Codificador de mensagens.",
+      description: "Message encoder/decoder tool",
       image: "/placeholder.svg?height=200&width=400",
       tags: ["React JS", "Node.js", "PostgreSQL"],
       demoUrl: "#",
@@ -51,7 +51,7 @@ export default function Projects() {
         transition={{ duration: 0.3 }}
         style={{ willChange: "transform, opacity" }}
       >
-        Projects
+        Side Projects
       </motion.h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project, index) => (
