@@ -62,7 +62,7 @@ export default function Experience() {
           {experiences.map((exp, idx) => (
             <button
               key={idx}
-              className={`flex items-center gap-3 p-4 rounded-lg border transition-all bg-primary/5 hover:bg-primary/10 border-primary/10 focus:outline-none ${
+              className={`flex items-center gap-3 p-4 rounded-lg border transition-all bg-card border-primary/10 focus:outline-none ${
                 selected === idx ? "ring-2 ring-primary" : ""
               }`}
               onClick={() => setSelected(idx)}
