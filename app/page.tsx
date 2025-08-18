@@ -145,7 +145,7 @@ export default function Home() {
             id="about"
             className="snap-start min-h-screen flex items-center"
           >
-            <AboutMe />
+            <AboutMe openPortal={openPortal} />
           </section>
           <section
             ref={sectionRefs[2]}

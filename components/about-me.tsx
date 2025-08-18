@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 
-export default function AboutMe() {
+export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
   return (
     <div className="flex flex-col items-center mx-auto max-w-6xl">
       <motion.h2
@@ -20,8 +20,9 @@ export default function AboutMe() {
         transition={{ duration: 0.3 }}
         style={{ willChange: "transform, opacity" }}
       >
-        Web developer interested in design, security, artificial intelligence,
-        and animated websites.
+        {openPortal
+          ? "A gamer focused on achievements, platinums and ranks. Passionate about souls-like, metroidvania and FPS games."
+          : "Web developer interested in design, security, artificial intelligence and animated websites."}
       </motion.p>
       <Button>See the magic</Button>
     </div>
