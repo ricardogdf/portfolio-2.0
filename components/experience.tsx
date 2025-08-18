@@ -1,49 +1,59 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-export default function Experience() {
+export default function Experience({ openPortal }: { openPortal: boolean }) {
   const [selected, setSelected] = useState<number>(0);
 
-  const experiences = [
-    {
-      company: "Prime DB Solutions",
-      logo: "/primedb.png",
-      period: "2023 - Presente",
-      role: "Full Stack Developer",
-      description:
-        "Experienced in building and maintaining web applications using React, TypeScript, Node.js, and Java. Sole developer responsible for the company’s ITSM system, overseeing the entire development lifecycle.",
-      achievements: [
-        "Led the migration of a legacy system to a modern, scalable stack with React.",
-        "Designed and implemented third-party API integrations to extend system functionality.",
-        "Developed a custom design system to standardize and enhance the UI/UX across the platform.",
-      ],
-      technologies: [
-        "React",
-        "Node.js",
-        "TypeScript",
-        "JavaScript",
-        "Java",
-        "Oracle",
-      ],
-    },
-    {
-      company: "Madeira Madeira",
-      logo: "/madeira-madeira.jpg",
-      period: "2021 - 2023",
-      role: "Desenvolvedor Frontend",
-      description:
-        "Focused on building components and pages using Next.js. Contributed as part of the team responsible for the homepage, product page, and product listing.",
-      achievements: [
-        "Developed reusable components for the company’s UI library.",
-        "Collaborated closely with designers to ensure an optimal user experience.",
-        "Contributed to performance and accessibility improvements across key pages.",
-      ],
-      technologies: ["Next.js", "React", "TypeScript", "Git", "GraphQL"],
-    },
-  ];
+  const experiences = useMemo(
+    () => [
+      {
+        company: openPortal ? "Steam" : "Prime DB Solutions",
+        logo: openPortal ? "/steam.png" : "/primedb.png",
+        period: openPortal ? "2019 - Currently" : "2023 - Currently",
+        role: openPortal ? "Achievement hunter" : "Full Stack Developer",
+        description: openPortal
+          ? "Focused on getting as many achievements and platinums as possible. I'm fascinated by Souls-like and Metroidvania games. I also really admire pixel art games."
+          : "Experienced in building and maintaining web applications using React, TypeScript, Node.js, and Java. Sole developer responsible for the company’s ITSM system, overseeing the entire development lifecycle.",
+        achievements: openPortal
+          ? ["Elden ring - 100%", "Dark souls 1 - 100%", "Hollow Knight - 99%"]
+          : [
+              "Led the migration of a legacy system to a modern, scalable stack with React.",
+              "Designed and implemented third-party API integrations to extend system functionality.",
+              "Developed a custom design system to standardize and enhance the UI/UX across the platform.",
+            ],
+        skills: openPortal
+          ? ["Achievement Hunter", "Platinum Collector", "Pixel Art Lover"]
+          : ["React", "Node.js", "TypeScript", "JavaScript", "Java", "Oracle"],
+      },
+      {
+        company: openPortal ? "Counter-Strike" : "Madeira Madeira",
+        logo: openPortal ? "/counter-strike.webp" : "/madeira-madeira.jpg",
+        period: openPortal ? "2017 - Currently" : "2021 - 2023",
+        role: openPortal ? "Casual Player" : "Desenvolvedor Frontend",
+        description: openPortal
+          ? "Focused on achieving the highest possible rank, playing rifles and occasionally AWPs. My playstyle is fragger. I'm a natural admirer of mirage."
+          : "Focused on building components and pages using Next.js. Contributed as part of the team responsible for the homepage, product page, and product listing.",
+        achievements: openPortal
+          ? [
+              "Global in CS:GO",
+              "Level 20 in GC",
+              "26k in Primier Mode - Rank 8k global",
+            ]
+          : [
+              "Developed reusable components for the company’s UI library.",
+              "Collaborated closely with designers to ensure an optimal user experience.",
+              "Contributed to performance and accessibility improvements across key pages.",
+            ],
+        skills: openPortal
+          ? ["Rifler", "AWP", "Fragger", "Entry Fragger", "Lurker"]
+          : ["Next.js", "React", "TypeScript", "Git", "GraphQL"],
+      },
+    ],
+    [openPortal]
+  );
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -104,7 +114,7 @@ export default function Experience() {
             <div>
               <h5 className="font-medium mb-2">Skills:</h5>
               <div className="flex flex-wrap gap-2">
-                {experiences[selected].technologies.map((tech, i) => (
+                {experiences[selected].skills.map((tech, i) => (
                   <span key={i} className="skill-badge text-xs py-1">
                     {tech}
                   </span>

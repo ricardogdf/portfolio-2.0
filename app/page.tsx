@@ -152,7 +152,7 @@ export default function Home() {
             id="experience"
             className="snap-start min-h-screen flex items-center"
           >
-            <Experience />
+            <Experience openPortal={openPortal} />
           </section>
           <section
             ref={sectionRefs[3]}
