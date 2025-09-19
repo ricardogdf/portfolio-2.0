@@ -2,7 +2,7 @@ import "../styles/balloon.css";
 
 export default function Balloon() {
   return (
-    <div className="container">
+    <div>
       <div className="envelope"></div>
       <div className="rigging"></div>
       <div className="skirt"></div>

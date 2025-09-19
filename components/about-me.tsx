@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-// import Balloon from "./balloon";
 
 export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
   const { theme } = useTheme();
@@ -18,7 +17,7 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
           About Me
         </motion.h2>
         <motion.p
-          className="mb-8 text-center text-muted-foreground"
+          className="mb-8 text-center "
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -41,7 +40,6 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
           />
         </svg>
       </>
-      {/*<Balloon />*/}
     </div>
   );
 }
