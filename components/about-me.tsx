@@ -29,7 +29,7 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
             : "Web developer interested in design, origamis, artificial intelligence and animated websites."}
         </motion.p>
         <svg
-          fill={theme === "dark" ? "#FFFFFF" : "#000000"}
+          fill={theme === "dark" || openPortal ? "#FFFFFF" : "#000000"}
           width="206"
           height="173"
           viewBox="0 0 412 346"
