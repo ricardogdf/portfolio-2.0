@@ -1,0 +1,153 @@
+/* Hot Air Balloon */
+/* Envelope */
+.envelope {
+  position: absolute;
+  top: 5px;
+  left: 85px;
+  height: 325px;
+  width: 325px;
+  background: linear-gradient(#c8444f, #f36464);
+  border-radius: 150%;
+  border-bottom-left-radius: 425%;
+  border-bottom-right-radius: 425%;
+  border-top-left-radius: 425%;
+  border-top-right-radius: 150%;
+  transform: rotate(135deg);
+  filter: drop-shadow(#9e343c 1px -3px 4px);
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 45px;
+  height: 349px;
+  width: 252px;
+  background: linear-gradient(#ffffff, #e1e0e6);
+  border-bottom-left-radius: 80%;
+  border-bottom-right-radius: 80%;
+  border-top-left-radius: 80%;
+  border-top-right-radius: 80%;
+  transform: rotate(-135deg);
+}
+
+.envelope::after {
+  content: "";
+  position: absolute;
+  top: -21px;
+  left: 112px;
+  height: 350px;
+  width: 120px;
+  background: linear-gradient(300deg, #c8444f, #ec5c5c);
+  border-bottom-left-radius: 80%;
+  border-bottom-right-radius: 80%;
+  border-top-left-radius: 80%;
+  border-top-right-radius: 80%;
+  transform: rotate(-135deg);
+}
+
+/* Skirt */
+.skirt {
+  position: absolute;
+  top: 345px;
+  left: 196px;
+  height: 42px;
+  width: 104px;
+  background: radial-gradient(circle at top left, #286179, #264154);
+  clip-path: polygon(0 0, 100% 0, 87% 100%, 13% 100%);
+}
+
+/* Rigging */
+.rigging {
+  position: absolute;
+  top: 387px;
+  left: 232px;
+  height: 39px;
+  width: 5px;
+  background: black;
+  box-shadow: 30px 0 0 0 black;
+}
+
+.rigging::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -17px;
+  height: 45px;
+  width: 5px;
+  background: black;
+  transform: rotate(-13deg);
+}
+
+.rigging::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 44px;
+  height: 46px;
+  width: 5px;
+  background: black;
+  transform: rotate(13deg);
+}
+
+/* Basket */
+.basket {
+  position: absolute;
+  top: 426px;
+  left: 220px;
+  height: 63px;
+  width: 59px;
+  background: radial-gradient(circle at top left, #fddf97, #e0be84);
+  border-bottom-left-radius: 15%;
+  border-bottom-right-radius: 15%;
+  filter: drop-shadow(#a68347 1px 2px 2px);
+}
+
+.basket::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -5px;
+  height: 16px;
+  width: 70px;
+  background: radial-gradient(circle at top left, #fddf97, #e0be84);
+  border-radius: 5px 5px;
+  filter: drop-shadow(#a68347 1px 2px 2px);
+}
+
+/* Sandbags */
+.sand-bag-center {
+  position: absolute;
+  top: 446px;
+  left: 239px;
+  height: 21px;
+  width: 21px;
+  background: radial-gradient(at top left, #ec5c5c, #c8444f);
+  filter: drop-shadow(#9e343c 3px 1px 2px);
+  border-top-left-radius: 30%;
+  border-top-right-radius: 150%;
+  border-bottom-right-radius: 150%;
+  border-bottom-left-radius: 150%;
+  transform: rotate(45deg);
+}
+
+.sand-bag-side {
+  position: absolute;
+  top: 441px;
+  left: 211px;
+  height: 28px;
+  width: 21px;
+  background: radial-gradient(circle at top left, #ec5c5c, #c8444f);
+  border-radius: 16px 0px 0px 8px;
+}
+
+.sand-bag-side::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 57px;
+  height: 28px;
+  width: 21px;
+  background: #c8444f;
+  border-radius: 0px 16px 8px 0px;
+}

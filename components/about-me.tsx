@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { Button } from "./ui/button";
-import { useState } from "react";
+import Balloon from "./balloon";
 
 export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
   return (
@@ -27,6 +26,7 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
             : "Web developer interested in design, security, artificial intelligence and animated websites."}
         </motion.p>
       </>
+      {/*<Balloon />*/}
     </div>
   );
 }
