@@ -24,12 +24,12 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
         >
           {openPortal
             ? "A gamer focused on achievements, platinums and ranks. Passionate about souls-like, metroidvania and FPS games."
-            : "Web developer interested in design, security, artificial intelligence and animated websites."}
+            : "Web developer interested in design, origamis, artificial intelligence and animated websites."}
         </motion.p>
         <Image
           className="object-cover"
-          width={150}
-          height={150}
+          width={200}
+          height={200}
           src={"/tsuru.svg"}
           alt={"tsuru"}
         />
