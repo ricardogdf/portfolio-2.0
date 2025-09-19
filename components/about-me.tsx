@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Balloon from "./balloon";
+import Image from "next/image";
 
 export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
   return (
@@ -25,6 +26,13 @@ export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
             ? "A gamer focused on achievements, platinums and ranks. Passionate about souls-like, metroidvania and FPS games."
             : "Web developer interested in design, security, artificial intelligence and animated websites."}
         </motion.p>
+        <Image
+          className="object-cover"
+          width={150}
+          height={150}
+          src={"/tsuru.svg"}
+          alt={"tsuru"}
+        />
       </>
       {/*<Balloon />*/}
     </div>
