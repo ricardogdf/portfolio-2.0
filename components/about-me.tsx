@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 
 export default function AboutMe({ openPortal }: { openPortal?: boolean }) {
-  const { theme } = useTheme();
-
   return (
     <div className="flex flex-col items-center mx-auto w-full">
       <motion.h2
