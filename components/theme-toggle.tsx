@@ -14,7 +14,7 @@ export function ThemeToggle({
   disabled = false,
   openPortal = false,
 }: ThemeToggleProps) {
-  const { setTheme, theme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
 
