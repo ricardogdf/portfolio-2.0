@@ -102,7 +102,7 @@ export default function Projects() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Github className="mr-2 h-4 w-4" /> Código
+                    <Github className="mr-2 h-4 w-4" /> Code
                   </a>
                 </Button>
               </CardFooter>

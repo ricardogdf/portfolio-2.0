@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import Balloon from "./balloon";
 
 export default function Experience({ openPortal }: { openPortal: boolean }) {
   const [selected, setSelected] = useState<number>(0);
@@ -127,28 +126,6 @@ export default function Experience({ openPortal }: { openPortal: boolean }) {
           </div>
         </div>
       </div>
-
-      <motion.div
-        style={{
-          zIndex: -1,
-          position: "relative",
-          left: "-85vw",
-          top: "-30vh",
-        }}
-      >
-        <Balloon />
-      </motion.div>
-      <motion.div
-        style={{
-          zIndex: -1,
-          position: "relative",
-          left: "-25vw",
-          top: "10vh",
-          scale: 0.4,
-        }}
-      >
-        <Balloon />
-      </motion.div>
     </>
   );
 }
