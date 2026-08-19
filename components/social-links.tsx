@@ -20,7 +20,7 @@ export default function SocialLinks({ openPortal = false }: SocialLinksProps) {
         asChild
       >
         <Link
-          href="https://www.linkedin.com/in/ricardogon%C3%A7alvesdafonseca/"
+          href="https://www.linkedin.com/in/ricardogdf/"
           target="_blank"
           aria-label="LinkedIn"
         >
