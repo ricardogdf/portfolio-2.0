@@ -89,7 +89,7 @@ export default function BackgroundScene({
       scale: 1,
       transition: {
         duration: 7.5,
-        ease: [0, 0.3, 0.4, 1],
+        ease: cubicBezier(0, 0.3, 0.4, 1),
         times: [0.3, 1],
       },
     },

@@ -21,7 +21,7 @@ const SECTIONS = [
 ];
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const sectionRefs = SECTIONS.map(() => useRef<HTMLElement | null>(null));
 
@@ -30,6 +30,12 @@ export default function Home() {
   const [isThemeDisabled, setIsThemeDisabled] = useState(false);
   const [sunAnimation, setSunAnimation] = useState(false);
   const [eclipseAnimation, setEclipseAnimation] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Evita problemas de hidratação
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Scroll snapping e detecção de seção visível
   useEffect(() => {
@@ -173,7 +179,7 @@ export default function Home() {
                   : "Thank you, that's all."}
               </h2>
 
-              {!openPortal && theme === "light" ? (
+              {mounted && !openPortal && resolvedTheme === "light" ? (
                 <button
                   id="behelit"
                   onClick={handleButtonClick}

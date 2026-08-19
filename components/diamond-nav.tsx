@@ -1,5 +1,3 @@
-import { useTheme } from "next-themes";
-
 export default function DiamondNav({
   SECTIONS,
   activeSection,
@@ -9,9 +7,6 @@ export default function DiamondNav({
   activeSection: string;
   onNavigate: (id: string) => void;
 }) {
-  const { resolvedTheme } = useTheme();
-  console.log("resolvedTheme", resolvedTheme === "dark");
-
   return (
     <div className="fixed right-6 top-1/2 z-50 flex flex-col gap-4 -translate-y-1/2">
       {SECTIONS.map((section) => {
